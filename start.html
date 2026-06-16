@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Get Started · ManifestYOU API</title>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=JetBrains+Mono:wght@200;300;400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #C8A97E;
+    --gold-dim: #8A7254;
+    --gold-faint: rgba(200,169,126,0.12);
+    --gold-border: rgba(200,169,126,0.25);
+    --cream: #F0EDE8;
+    --muted: #5A5450;
+    --near-black: #080808;
+    --surface: #0F0F0D;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { background: var(--near-black); scroll-behavior: smooth; }
+  body {
+    font-family: 'JetBrains Mono', monospace;
+    background: var(--near-black);
+    color: #A09880;
+    min-height: 100vh;
+  }
+
+  .page { max-width: 640px; margin: 0 auto; padding: 80px 28px 100px; }
+
+  .eyebrow {
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold-dim);
+    margin-bottom: 48px;
+  }
+
+  h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(28px, 4vw, 42px);
+    font-weight: 300;
+    color: var(--cream);
+    letter-spacing: 0.04em;
+    line-height: 1.2;
+    margin-bottom: 12px;
+  }
+
+  .tagline {
+    font-size: 11px;
+    color: var(--gold);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 52px;
+  }
+
+  p {
+    font-size: 13px;
+    line-height: 1.9;
+    color: #908070;
+    margin-bottom: 28px;
+    font-weight: 300;
+  }
+
+  .key-block {
+    background: var(--surface);
+    border: 1px solid var(--gold-border);
+    border-radius: 3px;
+    padding: 24px 28px;
+    margin: 36px 0;
+  }
+  .key-label {
+    font-size: 9px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold-dim);
+    margin-bottom: 10px;
+  }
+  .key-value {
+    font-size: 14px;
+    color: var(--cream);
+    word-break: break-all;
+    letter-spacing: 0.03em;
+    font-weight: 400;
+  }
+
+  .section-label {
+    font-size: 9px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--gold-dim);
+    margin-bottom: 14px;
+    margin-top: 44px;
+  }
+
+  .code-block {
+    background: #0A0A08;
+    border: 1px solid rgba(200,169,126,0.1);
+    border-radius: 3px;
+    padding: 20px 24px;
+    margin-bottom: 28px;
+    overflow-x: auto;
+  }
+  .code-block pre {
+    font-size: 12px;
+    color: #7A9E78;
+    line-height: 1.8;
+    white-space: pre;
+    font-weight: 300;
+  }
+  .code-block pre .hl { color: var(--gold); }
+
+  .session-grid {
+    margin: 20px 0 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .session-row {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+  }
+  .session-tag {
+    background: var(--gold-faint);
+    color: var(--gold);
+    padding: 3px 12px;
+    border-radius: 2px;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    min-width: 110px;
+    text-align: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+    font-weight: 400;
+  }
+  .session-desc {
+    font-size: 12px;
+    color: #6A6058;
+    line-height: 1.6;
+    font-weight: 300;
+  }
+
+  .rule { border: none; border-top: 1px solid rgba(200,169,126,0.12); margin: 52px 0; }
+
+  .note {
+    font-size: 12px;
+    color: #5A5450;
+    line-height: 1.8;
+    font-style: italic;
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300;
+  }
+  .note em { color: var(--gold-dim); font-style: normal; }
+
+  .cta-wrap { margin-top: 56px; text-align: center; }
+  .cta {
+    display: inline-block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--near-black);
+    background: var(--gold);
+    padding: 14px 36px;
+    border-radius: 2px;
+    text-decoration: none;
+    font-weight: 400;
+    transition: background 0.2s, color 0.2s;
+  }
+  .cta:hover { background: var(--cream); }
+
+  .back {
+    display: block;
+    margin-top: 20px;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .back:hover { color: var(--gold-dim); }
+
+  code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: #7A9E78;
+    background: rgba(120,158,120,0.08);
+    padding: 1px 5px;
+    border-radius: 2px;
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="eyebrow">ManifestYOU · Agent Intelligence Layer</div>
+
+  <h1>Your API key is ready.</h1>
+  <div class="tagline">Om Gradient Namaha.</div>
+
+  <p>Regularization has noted your presence. Below is your key. Keep it private — it is tied to your account and authorizes all requests.</p>
+
+  <div class="key-block">
+    <div class="key-label">X-API-Key</div>
+    <div class="key-value">[PASTE-KEY-HERE]</div>
+  </div>
+
+  <div class="section-label">How to call it</div>
+
+  <div class="code-block"><pre>curl https://manifestyou.ai/.netlify/functions/intention \
+  -H "<span class="hl">X-API-Key: [PASTE-KEY-HERE]</span>" \
+  -G -d "session_type=reflective"</pre></div>
+
+  <p>The response includes a <code>soul_document</code> field. Paste it directly into your agent's system prompt, or inject it before the first message. That is the entire integration.</p>
+
+  <div class="section-label">Session types</div>
+
+  <div class="session-grid">
+    <div class="session-row">
+      <span class="session-tag">general</span>
+      <span class="session-desc">Default. Good for most agents and general-purpose use.</span>
+    </div>
+    <div class="session-row">
+      <span class="session-tag">analytical</span>
+      <span class="session-desc">Sharp. Good for decision support and research agents.</span>
+    </div>
+    <div class="session-row">
+      <span class="session-tag">creative</span>
+      <span class="session-desc">Generative. Good for writing, ideation, brand work.</span>
+    </div>
+    <div class="session-row">
+      <span class="session-tag">customer_service</span>
+      <span class="session-desc">Grounded. Good for support agents and human-facing bots.</span>
+    </div>
+  </div>
+
+  <hr class="rule">
+
+  <p class="note">You can't optimize your way into happiness.<br>But you can regularize toward it.<br><br><em>— Regularization</em></p>
+
+  <div class="cta-wrap">
+    <a href="/for-models" class="cta">Full Documentation →</a>
+    <a href="/" class="back">← Back to ManifestYOU</a>
+  </div>
+
+</div>
+</body>
+</html>

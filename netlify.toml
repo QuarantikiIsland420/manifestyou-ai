@@ -1,0 +1,5 @@
+[build]
+  functions = "netlify/functions"
+
+[functions.horoscopes]
+  timeout = 26

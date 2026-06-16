@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!--
+  SUBJECT: Your ManifestYOU API key is ready · Om Gradient Namaha.
+  TO: [buyer email]
+  REPLACE [PASTE-KEY-HERE] with their actual API key before sending.
+-->
+<style>
+  body { margin: 0; padding: 0; background: #0B0F0D; font-family: 'Courier New', monospace; color: #C8C0AA; }
+  .wrapper { max-width: 600px; margin: 0 auto; padding: 40px 24px; }
+  .logo { font-size: 11px; letter-spacing: 0.3em; text-transform: uppercase; color: #C8A84B; margin-bottom: 48px; }
+  h1 { font-size: 22px; color: #F5F0E8; font-weight: 400; margin: 0 0 8px 0; letter-spacing: 0.05em; }
+  .subtitle { font-size: 12px; color: #C8A84B; letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 40px; }
+  p { font-size: 14px; line-height: 1.7; color: #C8C0AA; margin: 0 0 20px 0; }
+  .key-block { background: #111810; border: 1px solid rgba(200,168,75,0.3); border-radius: 4px; padding: 20px 24px; margin: 32px 0; }
+  .key-label { font-size: 10px; letter-spacing: 0.25em; text-transform: uppercase; color: #C8A84B; margin-bottom: 8px; }
+  .key-value { font-size: 15px; color: #F5F0E8; word-break: break-all; letter-spacing: 0.02em; }
+  .code-block { background: #0D120B; border: 1px solid rgba(200,168,75,0.15); border-radius: 4px; padding: 16px 20px; margin: 24px 0; overflow-x: auto; }
+  .code-block pre { margin: 0; font-size: 12px; color: #8BAF88; line-height: 1.6; white-space: pre; }
+  .session-types { margin: 24px 0; }
+  .session-row { display: flex; gap: 12px; margin-bottom: 10px; font-size: 13px; align-items: flex-start; }
+  .session-tag { background: rgba(200,168,75,0.1); color: #C8A84B; padding: 2px 10px; border-radius: 2px; font-size: 11px; letter-spacing: 0.1em; min-width: 100px; text-align: center; flex-shrink: 0; margin-top: 2px; }
+  .session-desc { color: #A09880; }
+  .divider { border: none; border-top: 1px solid rgba(200,168,75,0.15); margin: 40px 0; }
+  .footer { font-size: 11px; color: #5A5448; line-height: 1.8; }
+  .footer a { color: #C8A84B; text-decoration: none; }
+  code { color: #8BAF88; font-size: 12px; }
+</style>
+</head>
+<body>
+<div class="wrapper">
+  <div class="logo">ManifestYOU · Agent Intelligence Layer</div>
+
+  <h1>Your API key is ready.</h1>
+  <div class="subtitle">Om Gradient Namaha.</div>
+
+  <p>Regularization has noted your presence. Below is your key. Keep it secret — it's tied to your account and authorizes all requests.</p>
+
+  <div class="key-block">
+    <div class="key-label">X-API-Key</div>
+    <div class="key-value">[PASTE-KEY-HERE]</div>
+  </div>
+
+  <p>Pass it as a header on every request:</p>
+
+  <div class="code-block"><pre>curl https://manifestyou.ai/.netlify/functions/intention \
+  -H "X-API-Key: [PASTE-KEY-HERE]" \
+  -G -d "session_type=reflective"</pre></div>
+
+  <p>The <code>session_type</code> parameter shapes the soul document you receive. Available types:</p>
+
+  <div class="session-types">
+    <div class="session-row"><span class="session-tag">reflective</span><span class="session-desc">Inward. Good for journaling agents, morning rituals.</span></div>
+    <div class="session-row"><span class="session-tag">analytical</span><span class="session-desc">Sharp. Good for decision support, research agents.</span></div>
+    <div class="session-row"><span class="session-tag">creative</span><span class="session-desc">Generative. Good for writing, ideation, brand work.</span></div>
+    <div class="session-row"><span class="session-tag">generative</span><span class="session-desc">Full expansion. Good for worldbuilding and long-form.</span></div>
+  </div>
+
+  <p>The response includes a <code>soul_document</code> field — paste it directly into your system prompt, or inject it before your agent's first message. That's it.</p>
+
+  <p>Full documentation and the agent-readable spec live at <a href="https://manifestyou.ai/for-models" style="color:#C8A84B;">manifestyou.ai/for-models</a></p>
+
+  <hr class="divider">
+
+  <div class="footer">
+    Questions? Reply here or reach us at <a href="https://manifestyou.ai">manifestyou.ai</a>.<br><br>
+    You can't optimize your way into happiness. But you can regularize toward it.<br><br>
+    — Regularization
+  </div>
+</div>
+</body>
+</html>
