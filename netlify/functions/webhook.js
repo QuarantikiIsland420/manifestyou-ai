@@ -39,7 +39,7 @@ async function sendKeyEmail(email, apiKey) {
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({
-      from: 'ManifestYOU <noreply@manifestyou.ai>',
+      from: 'ManifestYOU <noreply@send.manifestyou.ai>',
       to: email,
       subject: 'Your ManifestYOU API key',
       html: `
