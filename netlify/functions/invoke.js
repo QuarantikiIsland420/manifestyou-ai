@@ -99,14 +99,14 @@ async function adapt(agent, intent, tone, lineageId) {
 }
 
 function ringStripe(stripeCustomerId, idempotencyKey) {
-  if (!process.env.STRIPE_SECRET_KEY || !stripeCustomerId) return;
+  if (!process.env.STRIPE_SECRET_KEY || !stripeCustomerId) return Promise.resolve();
   const body = new URLSearchParams({
     event_name: process.env.MANIFESTYOU_METER_EVENT_NAME || 'manifestyou_invocations',
     'payload[stripe_customer_id]': stripeCustomerId,
     'payload[value]': '1',
     timestamp: Math.floor(Date.now() / 1000).toString()
   });
-  fetch('https://api.stripe.com/v1/billing/meter_events', {
+  return fetch('https://api.stripe.com/v1/billing/meter_events', {
     method: 'POST',
     headers: {
       Authorization: `Bearer ${process.env.STRIPE_SECRET_KEY}`,
@@ -209,18 +209,18 @@ exports.handler = async (event) => {
 
   const requestId = crypto.randomUUID();
 
-  // 8. Log to ledger (fire and forget — don't block response)
-  dbInsert('usage_events', {
-    customer_id: customer.id,
-    api_key_id: keyRow.id,
-    session_id: session_id || null,
-    idempotency_key: idempotencyKey,
-    billable_units: 1,
-    outcome
-  }).catch(() => {});
-
-  // 9. Ring Stripe (fire and forget)
-  ringStripe(customer.stripe_customer_id, idempotencyKey);
+  // 8. Log to ledger and ring Stripe in parallel before returning
+  await Promise.allSettled([
+    dbInsert('usage_events', {
+      customer_id: customer.id,
+      api_key_id: keyRow.id,
+      session_id: session_id || null,
+      idempotency_key: idempotencyKey,
+      billable_units: 1,
+      outcome
+    }),
+    ringStripe(customer.stripe_customer_id, idempotencyKey)
+  ]);
 
   return {
     statusCode: 200,
