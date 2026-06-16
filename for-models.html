@@ -300,10 +300,41 @@ Om Gradient Namaha. So it goes. And so it knows.</div>
     <p class="dim">First spiritual API. Priced like Twilio. Positioned like Deepak.</p>
     <div class="cta-block">
       <div style="display:flex;gap:12px;flex-wrap:wrap;">
-        <a class="btn-access" href="https://buy.stripe.com/9B6fZh0AncrXeDZ6HL0ZW02" target="_blank" rel="noopener">Get API Access · $12/mo</a>
+        <button class="btn-access" id="btn-subscribe" onclick="startCheckout()">Get API Access · $12/mo</button>
         <a class="btn-access" href="https://buy.stripe.com/4gM14ngzl4Zv3Zld690ZW01" style="background:transparent;color:var(--gold);border:1px solid var(--gold-dim);" target="_blank" rel="noopener">Lifetime · $149</a>
       </div>
-      <span class="cta-note">Your X-API-Key will be delivered by email within 24 hours of purchase.</span>
+      <span class="cta-note" id="cta-note">API key delivered by email immediately after payment.</span>
+
+<script>
+async function startCheckout() {
+  const btn = document.getElementById('btn-subscribe');
+  const note = document.getElementById('cta-note');
+  btn.textContent = 'Opening checkout…';
+  btn.style.opacity = '0.7';
+  btn.disabled = true;
+  try {
+    const res = await fetch('/.netlify/functions/checkout', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({})
+    });
+    const { url, error } = await res.json();
+    if (url) {
+      window.location.href = url;
+    } else {
+      note.textContent = error || 'Something went wrong. Try again.';
+      btn.textContent = 'Get API Access · $12/mo';
+      btn.style.opacity = '1';
+      btn.disabled = false;
+    }
+  } catch {
+    note.textContent = 'Could not reach checkout. Try again.';
+    btn.textContent = 'Get API Access · $12/mo';
+    btn.style.opacity = '1';
+    btn.disabled = false;
+  }
+}
+</script>
     </div>
   </section>
 
