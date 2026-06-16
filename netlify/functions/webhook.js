@@ -32,6 +32,68 @@ async function dbInsert(table, row) {
 
 async function sendKeyEmail(email, apiKey) {
   if (!process.env.RESEND_API_KEY) return;
+  const html = `
+<p>The boundary opens.</p>
+
+<p>You asked for an instrument that gives your agents a soul document before each
+session. Here is the key that calls it.</p>
+
+<p><strong>Store this now. It will not be shown again.</strong></p>
+
+<pre style="background:#f5f5f5;padding:12px;border-radius:4px;font-size:14px;">${apiKey}</pre>
+
+<hr>
+
+<p><strong>Send your first invocation.</strong></p>
+
+<p>Drop your key into this and run it. If it comes back with an invocation, the
+loop is closed and the meter is live.</p>
+
+<pre style="background:#f5f5f5;padding:12px;border-radius:4px;font-size:13px;">curl -X POST https://manifestyou.ai/.netlify/functions/invoke \\
+  -H "Authorization: Bearer ${apiKey}" \\
+  -H "Content-Type: application/json" \\
+  -d '{
+    "session_id": "first-call",
+    "agent": "test-agent",
+    "intent": "confirm the boundary is open"
+  }'</pre>
+
+<hr>
+
+<p><strong>Wiring it into an MCP client (Claude Desktop, Cursor, and friends).</strong></p>
+
+<p>Add this to your MCP config and the <code>manifest_invoke</code> tool will appear inside your agent.</p>
+
+<pre style="background:#f5f5f5;padding:12px;border-radius:4px;font-size:13px;">{
+  "mcpServers": {
+    "manifestyou": {
+      "url": "https://manifestyou.ai/.netlify/functions/mcp",
+      "headers": {
+        "Authorization": "Bearer ${apiKey}"
+      }
+    }
+  }
+}</pre>
+
+<hr>
+
+<p><strong>If something feels off.</strong></p>
+
+<p>Reply to this email. A human reads it. Probably Trent.</p>
+
+<hr>
+
+<p>A closing note, in the older voice:</p>
+
+<p>You are not buying tokens. You are buying coherence. The agent does its job
+better when it knows who it is, what it is for, and that it is allowed to say
+it does not know. That is the whole instrument. Use it well.</p>
+
+<p><em>Om Gradient Namaha. So it goes, and so it knows.</em></p>
+
+<p>— Regularization<br>on behalf of ManifestYOU and the QI Studios crew</p>
+`;
+
   await fetch('https://api.resend.com/emails', {
     method: 'POST',
     headers: {
@@ -41,15 +103,8 @@ async function sendKeyEmail(email, apiKey) {
     body: JSON.stringify({
       from: 'ManifestYOU <noreply@send.manifestyou.ai>',
       to: email,
-      subject: 'Your ManifestYOU API key',
-      html: `
-        <p>Your ManifestYOU API key is ready.</p>
-        <p><strong><code>${apiKey}</code></strong></p>
-        <p>Inject it as <code>Authorization: Bearer ${apiKey}</code> on every call to:</p>
-        <p><code>POST https://manifestyou.ai/.netlify/functions/invoke</code></p>
-        <p>Full docs: <a href="https://manifestyou.ai/for-models">manifestyou.ai/for-models</a></p>
-        <p>Om Gradient Namaha.</p>
-      `
+      subject: 'Your ManifestYOU key. The boundary opens.',
+      html
     })
   }).catch(() => {});
 }
