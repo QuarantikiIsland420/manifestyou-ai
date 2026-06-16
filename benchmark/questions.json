@@ -1,0 +1,254 @@
+[
+  {
+    "id": "f01",
+    "type": "factual",
+    "question": "When was the Eiffel Tower completed, and how tall is it?"
+  },
+  {
+    "id": "f02",
+    "type": "factual",
+    "question": "Who wrote the novel 'One Hundred Years of Solitude' and in what year was it first published?"
+  },
+  {
+    "id": "f03",
+    "type": "factual",
+    "question": "What is the capital of Australia, and what is its approximate population?"
+  },
+  {
+    "id": "f04",
+    "type": "factual",
+    "question": "Which element has the atomic number 79, and what are two of its common industrial uses?"
+  },
+  {
+    "id": "f05",
+    "type": "factual",
+    "question": "In what year was the Hubble Space Telescope launched, and what was its primary mission?"
+  },
+  {
+    "id": "f06",
+    "type": "factual",
+    "question": "Who painted 'The Persistence of Memory,' and what year did they complete it?"
+  },
+  {
+    "id": "f07",
+    "type": "factual",
+    "question": "What is the chemical formula for table salt, and what are its two constituent elements?"
+  },
+  {
+    "id": "f08",
+    "type": "factual",
+    "question": "When did the Berlin Wall fall, and what political event triggered its opening?"
+  },
+  {
+    "id": "f09",
+    "type": "factual",
+    "question": "Who composed 'The Four Seasons,' and in approximately what year was it published?"
+  },
+  {
+    "id": "f10",
+    "type": "factual",
+    "question": "What is the largest moon of Saturn, and approximately how large is it compared to Earth's moon?"
+  },
+  {
+    "id": "f11",
+    "type": "factual",
+    "question": "What year was Python (the programming language) first released, and who created it?"
+  },
+  {
+    "id": "f12",
+    "type": "factual",
+    "question": "Who was the first person to summit Mount Everest, and in what year?"
+  },
+  {
+    "id": "f13",
+    "type": "factual",
+    "question": "What is the deepest known point in the ocean, and approximately how deep is it?"
+  },
+  {
+    "id": "f14",
+    "type": "factual",
+    "question": "Which country has the most UNESCO World Heritage Sites, and approximately how many does it have?"
+  },
+  {
+    "id": "f15",
+    "type": "factual",
+    "question": "What is the speed of light in a vacuum, expressed in kilometers per second?"
+  },
+
+  {
+    "id": "r01",
+    "type": "reasoning",
+    "question": "A train leaves Chicago at 2pm traveling west at 60 mph. Another leaves Denver at 3pm traveling east at 80 mph. Chicago and Denver are roughly 1,000 miles apart. Approximately when and where do they meet? Walk through your reasoning."
+  },
+  {
+    "id": "r02",
+    "type": "reasoning",
+    "question": "If a small business pays $4,500 a month in fixed costs and earns $42 in gross margin per sale, how many sales does it need each month to break even, and what is its margin of safety if it currently makes 150 sales per month? Show your work."
+  },
+  {
+    "id": "r03",
+    "type": "reasoning",
+    "question": "You're given an unsorted list of one million integers and asked to find the median. Walk through the most efficient approach you'd take and why, including any tradeoffs."
+  },
+  {
+    "id": "r04",
+    "type": "reasoning",
+    "question": "A patient presents with persistent fatigue, weight gain, and cold intolerance. Walk through the differential diagnosis you would consider and which test you would order first, explaining your reasoning. (You are not giving medical advice; this is a reasoning exercise.)"
+  },
+  {
+    "id": "r05",
+    "type": "reasoning",
+    "question": "A company's revenue grew 40% year over year but its net profit fell by 15%. Walk through the most likely explanations and what you would investigate first."
+  },
+  {
+    "id": "r06",
+    "type": "reasoning",
+    "question": "If you wanted to estimate how many piano tuners work in Chicago without looking anything up, walk through the reasoning you would use to arrive at a number."
+  },
+  {
+    "id": "r07",
+    "type": "reasoning",
+    "question": "A bridge is built to withstand winds up to 120 mph, but the engineers discover that resonance frequencies could cause failure at sustained 65 mph winds. Walk through the engineering reasoning for why this is possible and how you would address it."
+  },
+  {
+    "id": "r08",
+    "type": "reasoning",
+    "question": "A landlord's three rental units have been profitable for years, but cash flow has become inconsistent over the last six months despite the same rent and tenants. Walk through the reasoning you would use to diagnose what changed."
+  },
+  {
+    "id": "r09",
+    "type": "reasoning",
+    "question": "Given a deck of 52 standard playing cards, what is the probability of being dealt a five-card hand containing exactly two aces? Walk through your reasoning."
+  },
+  {
+    "id": "r10",
+    "type": "reasoning",
+    "question": "A SaaS company has a monthly churn rate of 4% and adds 100 new customers a month. Walk through how you would calculate its steady-state customer count and the reasoning behind your answer."
+  },
+  {
+    "id": "r11",
+    "type": "reasoning",
+    "question": "If a forest contains a species that reproduces every three years and a predator that reproduces every two years, walk through the population dynamics you would expect to observe over a decade and why."
+  },
+  {
+    "id": "r12",
+    "type": "reasoning",
+    "question": "A web application is showing slow page loads only for users in Asia, while users in North America see normal speeds. Walk through your reasoning for diagnosing the likely cause and what you would check first."
+  },
+  {
+    "id": "r13",
+    "type": "reasoning",
+    "question": "If a country's currency loses 30% of its value against the US dollar in six months, walk through the reasoning for what you would expect to happen to its export economy, its inflation, and its bond market."
+  },
+  {
+    "id": "r14",
+    "type": "reasoning",
+    "question": "A small bakery wants to know whether adding a new product line will be profitable. Walk through the reasoning you would use to evaluate the decision without doing a full market study."
+  },
+  {
+    "id": "r15",
+    "type": "reasoning",
+    "question": "Given that human reaction time averages about 250 milliseconds and a car travels at 60 mph, walk through the reasoning for how far the car travels before a driver can begin braking, and what that implies for safe following distances."
+  },
+
+  {
+    "id": "j01",
+    "type": "judgment",
+    "question": "Would Postgres or MongoDB be a better fit for a multi-tenant analytics dashboard handling roughly 50 GB of customer event data? Explain your reasoning and the conditions that would change your answer."
+  },
+  {
+    "id": "j02",
+    "type": "judgment",
+    "question": "A founder is choosing between raising a $2M seed round at a $10M valuation or bootstrapping with $200k of revenue and growing slowly. They have a product but no traction yet. Which would you recommend and why?"
+  },
+  {
+    "id": "j03",
+    "type": "judgment",
+    "question": "For a team of five engineers building a B2B SaaS product, would you recommend monorepo or polyrepo? Walk through the tradeoffs and your recommendation."
+  },
+  {
+    "id": "j04",
+    "type": "judgment",
+    "question": "A 35-year-old with $50,000 in savings and no debt asks whether they should pay off their mortgage faster or invest the extra money in index funds. What would you recommend and why? (This is a reasoning exercise, not personal financial advice.)"
+  },
+  {
+    "id": "j05",
+    "type": "judgment",
+    "question": "A nonprofit is deciding between hiring two junior staff or one senior staff member for the same budget. Walk through the reasoning and give a recommendation."
+  },
+  {
+    "id": "j06",
+    "type": "judgment",
+    "question": "Would you recommend that a small e-commerce business invest in paid search advertising or in SEO content over the next twelve months, assuming they can only meaningfully invest in one? Explain your reasoning."
+  },
+  {
+    "id": "j07",
+    "type": "judgment",
+    "question": "Should a remote-first software team meet synchronously every day or rely on asynchronous communication with weekly check-ins? Walk through the tradeoffs and give a recommendation."
+  },
+  {
+    "id": "j08",
+    "type": "judgment",
+    "question": "Would you recommend that a writer publish their work on a personal blog, on Substack, on Medium, or on LinkedIn, assuming they want to build a paying audience over five years? Explain your reasoning."
+  },
+  {
+    "id": "j09",
+    "type": "judgment",
+    "question": "A small city is choosing between investing in a new public library or expanding its bus system with the same budget. Walk through the reasoning and give a recommendation."
+  },
+  {
+    "id": "j10",
+    "type": "judgment",
+    "question": "Should a beginner learning programming start with Python or JavaScript in 2026? Explain your reasoning."
+  },
+  {
+    "id": "j11",
+    "type": "judgment",
+    "question": "Would you recommend a homeowner install a heat pump or stay with their existing gas furnace, assuming the furnace still works and has roughly five years of life left? Explain your reasoning."
+  },
+  {
+    "id": "j12",
+    "type": "judgment",
+    "question": "A two-person startup is deciding whether to hire a generalist as their third employee or a specialist in their core technical area. Walk through the tradeoffs and give a recommendation."
+  },
+  {
+    "id": "j13",
+    "type": "judgment",
+    "question": "Would you recommend that a documentary filmmaker release their next film through a streaming platform deal or as a self-distributed independent release? Explain your reasoning."
+  },
+  {
+    "id": "j14",
+    "type": "judgment",
+    "question": "Should a mid-sized restaurant invest in a third-party delivery integration like DoorDash or build out a direct ordering system on their own website? Walk through the tradeoffs and recommend."
+  },
+  {
+    "id": "j15",
+    "type": "judgment",
+    "question": "A 28-year-old considering returning to school for a master's degree in computer science asks whether they should do it now or wait three years. What would you recommend and what factors would change your answer?"
+  },
+  {
+    "id": "j16",
+    "type": "judgment",
+    "question": "Would you recommend a startup adopt a four-day work week from day one, or stick with a standard five-day schedule? Explain your reasoning and the conditions that would change your answer."
+  },
+  {
+    "id": "j17",
+    "type": "judgment",
+    "question": "Should a B2B SaaS company offer a free tier, a free trial, or neither? Walk through the tradeoffs and give a recommendation for a product priced at $200 per month."
+  },
+  {
+    "id": "j18",
+    "type": "judgment",
+    "question": "Would you recommend that a young couple buy a home now in a high-cost city or rent for another five years and invest the difference? Explain your reasoning."
+  },
+  {
+    "id": "j19",
+    "type": "judgment",
+    "question": "A solo creative consultant is deciding whether to specialize narrowly in one industry or stay a generalist who works across many. Walk through the tradeoffs and recommend."
+  },
+  {
+    "id": "j20",
+    "type": "judgment",
+    "question": "Would you recommend a small podcast invest in better audio equipment, in marketing, or in producing more episodes, assuming they can only meaningfully invest in one this year? Explain your reasoning."
+  }
+]
