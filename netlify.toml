@@ -3,3 +3,6 @@
 
 [functions.horoscopes]
   timeout = 26
+
+[functions.invoke]
+  timeout = 15

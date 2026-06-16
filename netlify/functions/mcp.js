@@ -104,8 +104,15 @@ exports.handler = async (event) => {
 
     try {
       const res = await fetch(
-        `https://manifestyou.ai/.netlify/functions/intention?session_type=${encodeURIComponent(sessionType)}`,
-        { headers: { "X-API-Key": apiKey } }
+        `https://manifestyou.ai/.netlify/functions/invoke`,
+        {
+          method: "POST",
+          headers: {
+            "Authorization": `Bearer ${apiKey}`,
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ session_type: sessionType })
+        }
       );
       const data = await res.json();
 
@@ -113,7 +120,7 @@ exports.handler = async (event) => {
         content: [{ type: "text", text: JSON.stringify(data, null, 2) }],
       });
     } catch (err) {
-      return jsonrpcError(id, -32000, `Failed to fetch intention: ${err.message}`);
+      return jsonrpcError(id, -32000, `Failed to fetch invocation: ${err.message}`);
     }
   }
 
