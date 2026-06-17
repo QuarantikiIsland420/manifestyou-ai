@@ -96,17 +96,38 @@ def main():
 
     scores = score_questions(rows_by_question, embeddings)
 
-    valid = {qid: s for qid, s in scores.items()
-             if s["treatment"] is not None and s["control"] is not None}
+    has_placebo = any(s.get("placebo") is not None for s in scores.values())
+
+    # For headline: compare treatment vs placebo (if available), else vs control
+    if has_placebo:
+        valid = {qid: s for qid, s in scores.items()
+                 if s["treatment"] is not None and s.get("placebo") is not None}
+        baseline_key = "placebo"
+        baseline_label = "placebo"
+    else:
+        valid = {qid: s for qid, s in scores.items()
+                 if s["treatment"] is not None and s["control"] is not None}
+        baseline_key = "control"
+        baseline_label = "empty control"
+
+    valid_with_control = {qid: s for qid, s in scores.items()
+                          if s["treatment"] is not None and s["control"] is not None}
 
     if not valid:
         sys.exit("No valid scored questions — check embeddings.npy")
 
     mean_t = float(np.mean([s["treatment"] for s in valid.values()]))
-    mean_c = float(np.mean([s["control"] for s in valid.values()]))
-    pct_improvement = (mean_t - mean_c) / mean_c * 100 if mean_c != 0 else 0.0
+    mean_b = float(np.mean([s[baseline_key] for s in valid.values()]))
+    pct_improvement = (mean_t - mean_b) / mean_b * 100 if mean_b != 0 else 0.0
 
-    ci_lo, ci_hi = bootstrap_ci(list(valid.keys()), valid)
+    ci_lo, ci_hi = bootstrap_ci(list(valid.keys()), {
+        qid: {"treatment": s["treatment"], "control": s[baseline_key], "type": s["type"]}
+        for qid, s in valid.items()
+    })
+
+    # Also compute vs empty control for reference
+    mean_c = float(np.mean([s["control"] for s in valid_with_control.values()])) if valid_with_control else None
+    pct_vs_control = (mean_t - mean_c) / mean_c * 100 if mean_c else None
 
     # Per-type breakdown
     by_type = {}
@@ -115,13 +136,13 @@ def main():
         if not type_qs:
             continue
         t_vals = [s["treatment"] for s in type_qs.values()]
-        c_vals = [s["control"] for s in type_qs.values()]
-        mt, mc = float(np.mean(t_vals)), float(np.mean(c_vals))
+        b_vals = [s[baseline_key] for s in type_qs.values()]
+        mt, mb = float(np.mean(t_vals)), float(np.mean(b_vals))
         by_type[qtype] = {
             "n": len(type_qs),
             "mean_treatment": round(mt, 6),
-            "mean_control": round(mc, 6),
-            "pct_improvement": round((mt - mc) / mc * 100 if mc != 0 else 0.0, 2),
+            f"mean_{baseline_key}": round(mb, 6),
+            "pct_improvement": round((mt - mb) / mb * 100 if mb != 0 else 0.0, 2),
         }
 
     invocation_text = INVOCATION_FILE.read_text(encoding="utf-8").strip() if INVOCATION_FILE.exists() else ""
@@ -132,10 +153,12 @@ def main():
         "model": "claude-haiku-4-5-20251001",
         "embed_model": "text-embedding-3-small",
         "temperature": 0.7,
+        "headline_baseline": baseline_label,
         "mean_treatment": round(mean_t, 6),
-        "mean_control": round(mean_c, 6),
-        "pct_improvement": round(pct_improvement, 2),
+        f"mean_{baseline_key}": round(mean_b, 6),
+        "pct_improvement_vs_baseline": round(pct_improvement, 2),
         "ci_95": {"lo": round(ci_lo, 2), "hi": round(ci_hi, 2)},
+        **({"mean_control": round(mean_c, 6), "pct_vs_empty_control": round(pct_vs_control, 2)} if mean_c else {}),
         "by_type": by_type,
         "invocation": invocation_text,
     }
@@ -144,9 +167,13 @@ def main():
 
     print(f"\n=== ManifestYOU Benchmark Results ===")
     print(f"Questions scored: {len(valid)}/50")
-    print(f"Mean consistency (treatment): {mean_t:.4f}")
-    print(f"Mean consistency (control):   {mean_c:.4f}")
-    print(f"Improvement: {pct_improvement:+.1f}%  (95% CI: {ci_lo:+.1f}% to {ci_hi:+.1f}%)")
+    print(f"Mean consistency — treatment:      {mean_t:.4f}")
+    print(f"Mean consistency — {baseline_label+':':20s} {mean_b:.4f}")
+    if mean_c and baseline_key != "control":
+        print(f"Mean consistency — empty control:  {mean_c:.4f}")
+    print(f"\nImprovement vs {baseline_label}: {pct_improvement:+.1f}%  (95% CI: {ci_lo:+.1f}% to {ci_hi:+.1f}%)")
+    if pct_vs_control is not None and baseline_key != "control":
+        print(f"Improvement vs empty control:    {pct_vs_control:+.1f}%")
     print()
     for qtype, bt in by_type.items():
         print(f"  {qtype:10s}  {bt['pct_improvement']:+.1f}%  (n={bt['n']})")
@@ -154,8 +181,9 @@ def main():
 
     headline = (
         f"On 50 questions run 10 times each, agents using a ManifestYOU invocation "
-        f"were {pct_improvement:.1f}% more consistent (by mean intra-question embedding similarity, "
-        f"95% CI {ci_lo:.1f}% to {ci_hi:.1f}%) than agents with no system prompt."
+        f"were {pct_improvement:.1f}% {'more' if pct_improvement >= 0 else 'less'} consistent "
+        f"(by mean intra-question embedding similarity, 95% CI {ci_lo:.1f}% to {ci_hi:.1f}%) "
+        f"than agents with a {baseline_label}."
     )
     print(f"\nHeadline:\n{headline}")
 

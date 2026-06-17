@@ -32,6 +32,8 @@ RESULTS_DIR = ROOT / "results"
 ANSWERS_CSV = RESULTS_DIR / "answers.csv"
 EMBEDDINGS_NPY = RESULTS_DIR / "embeddings.npy"
 
+PLACEBO_PROMPT = "You are a helpful, accurate assistant. Answer the user's question clearly and directly."
+
 MODEL = "claude-haiku-4-5-20251001"
 TEMPERATURE = 0.7
 MAX_TOKENS = 500
@@ -93,7 +95,7 @@ async def run_all_calls(questions, invocation, done):
     tasks = []
 
     for q in questions:
-        for condition, system_prompt in [("treatment", invocation), ("control", None)]:
+        for condition, system_prompt in [("treatment", invocation), ("control", None), ("placebo", PLACEBO_PROMPT)]:
             for run_idx in range(RUNS_PER_CONDITION):
                 key = (q["id"], condition, run_idx)
                 if key in done:
