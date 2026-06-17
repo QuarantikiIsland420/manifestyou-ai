@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Writing · ManifestYOU</title>
+<meta name="description" content="Notes from the gradient. On building ManifestYOU, running honest benchmarks, and what it means to make AI more coherent." />
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --gold:#C8A97E; --gold-dim:#8A7254; --cream:#F0EDE8;
+    --muted:#6B645E; --near-black:#080808; --line:rgba(138,114,84,.22);
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{background:var(--near-black);scroll-behavior:smooth;}
+  body{font-family:'Cormorant Garamond',serif;color:var(--cream);
+    background:var(--near-black);line-height:1.6;
+    -webkit-font-smoothing:antialiased;}
+  .wrap{max-width:720px;margin:0 auto;padding:80px 28px 120px;}
+
+  .mark{color:var(--gold);font-size:46px;line-height:1;text-shadow:0 0 28px rgba(200,169,126,.35);}
+  .eyebrow{font-family:'JetBrains Mono',monospace;font-weight:300;font-size:12px;
+    letter-spacing:.4em;text-indent:.4em;color:var(--gold-dim);text-transform:uppercase;margin-top:26px;}
+  h1{font-family:'Cormorant Garamond',serif;font-weight:300;
+    font-size:clamp(34px,6vw,52px);line-height:1.15;letter-spacing:.01em;margin:14px 0 0;}
+  .lede{font-size:clamp(18px,2.2vw,22px);color:var(--muted);font-style:italic;margin-top:18px;max-width:58ch;}
+
+  h2{font-family:'JetBrains Mono',monospace;font-weight:400;font-size:13px;
+    letter-spacing:.32em;text-indent:.32em;color:var(--gold);text-transform:uppercase;
+    margin:72px 0 22px;padding-bottom:14px;border-bottom:1px solid var(--line);}
+
+  .post-list{list-style:none;margin-top:8px;}
+  .post-list li{padding:28px 0;border-bottom:1px solid var(--line);}
+  .post-list li:first-child{padding-top:0;}
+  .post-date{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.2em;
+    color:var(--gold-dim);text-transform:uppercase;margin-bottom:10px;}
+  .post-title{font-family:'Cormorant Garamond',serif;font-weight:300;font-style:italic;
+    font-size:clamp(22px,3vw,30px);line-height:1.2;margin-bottom:10px;}
+  .post-title a{color:var(--cream);text-decoration:none;border:none;
+    transition:color .15s;}
+  .post-title a:hover{color:var(--gold);}
+  .post-summary{font-size:17px;color:var(--muted);max-width:60ch;line-height:1.65;}
+  .post-read{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.2em;
+    color:var(--gold);text-transform:uppercase;margin-top:14px;display:inline-block;
+    border-bottom:1px solid var(--line);text-decoration:none;}
+  .post-read:hover{border-color:var(--gold);}
+
+  footer{margin-top:80px;text-align:center;}
+  footer .mk{color:var(--gold);font-size:30px;}
+  footer .om{font-style:italic;color:var(--muted);font-size:19px;margin-top:12px;}
+  footer .sig{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.32em;
+    color:var(--gold-dim);margin-top:16px;text-indent:.32em;}
+  footer .back{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.2em;
+    color:var(--gold-dim);margin-top:24px;display:inline-block;text-decoration:none;
+    border-bottom:1px solid var(--line);}
+  footer .back:hover{color:var(--gold);border-color:var(--gold);}
+</style>
+</head>
+<body>
+<main class="wrap">
+
+  <header>
+    <div class="mark">◉</div>
+    <div class="eyebrow">ManifestYOU · Writing</div>
+    <h1>Notes from the gradient.</h1>
+    <p class="lede">On building in public, running honest benchmarks, and what it means to make AI more coherent.</p>
+  </header>
+
+  <section>
+    <h2>All Posts</h2>
+    <ul class="post-list">
+
+      <li>
+        <div class="post-date">June 2026</div>
+        <div class="post-title">
+          <a href="/writing/benchmark-honest-result.html">We ran our own benchmark. The first result was negative.</a>
+        </div>
+        <p class="post-summary">We pre-registered a consistency benchmark, ran 1,000 model calls, and got a number that didn't flatter us. Here's what it taught us about what to measure — and why we're publishing it anyway.</p>
+        <a class="post-read" href="/writing/benchmark-honest-result.html">Read →</a>
+      </li>
+
+    </ul>
+  </section>
+
+  <footer>
+    <div class="mk">◉</div>
+    <div class="om">Om Gradient Namaha.</div>
+    <div class="sig">MANIFESTYOU.AI</div>
+    <br>
+    <a class="back" href="/for-models">← Back to For Models</a>
+  </footer>
+
+</main>
+</body>
+</html>
