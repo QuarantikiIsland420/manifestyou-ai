@@ -74,6 +74,19 @@ async function dbInsert(table, row) {
   });
 }
 
+function buildLean(agent, intent, lineageId) {
+  const role = agent || 'assistant';
+  const purpose = intent || 'complete this session with care and precision';
+  let doc =
+    `You are ${role}. Your purpose in this session is to ${purpose}. ` +
+    'Stay in role. If you are uncertain about a specific fact, say so plainly rather than guess. ' +
+    'If your answer requires assumptions, name them. Be specific. Be concise.';
+  if (lineageId && lineageId !== 'none') {
+    doc += ` You are one step in a longer chain (lineage: ${lineageId}). Hand your work forward whole.`;
+  }
+  return doc;
+}
+
 async function adapt(agent, intent, tone, lineageId) {
   const prompt = ADAPTATION_PROMPT
     .replace('{agent}', agent || 'general assistant')
@@ -194,17 +207,23 @@ exports.handler = async (event) => {
   try { body = JSON.parse(event.body || '{}'); } catch {}
   const { session_id, agent, intent, tone, lineage_id, session_type } = body;
 
-  // 7. Generate soul document (with static fallback)
+  // 7. Generate soul document
+  // Default: lean template (no Haiku call). tone=voice opts into the voiced soul document.
   let invocation = null;
   let outcome = 'served';
-  try {
-    invocation = await adapt(agent, intent, tone, lineage_id);
-  } catch {}
+  const useVoice = (tone || '').toLowerCase() === 'voice';
 
-  if (!invocation) {
-    const fallbackKey = (session_type || 'general').toLowerCase();
-    invocation = FALLBACK[fallbackKey] || FALLBACK.general;
-    outcome = 'fallback';
+  if (useVoice) {
+    try {
+      invocation = await adapt(agent, intent, tone, lineage_id);
+    } catch {}
+    if (!invocation) {
+      const fallbackKey = (session_type || 'general').toLowerCase();
+      invocation = FALLBACK[fallbackKey] || FALLBACK.general;
+      outcome = 'fallback';
+    }
+  } else {
+    invocation = buildLean(agent, intent, lineage_id);
   }
 
   const requestId = crypto.randomUUID();
