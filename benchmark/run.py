@@ -34,6 +34,13 @@ EMBEDDINGS_NPY = RESULTS_DIR / "embeddings.npy"
 
 PLACEBO_PROMPT = "You are a helpful, accurate assistant. Answer the user's question clearly and directly."
 
+LEAN_PROMPT = (
+    "You are a research assistant. Your purpose in this session is to answer "
+    "the user's question accurately and clearly. Stay in role. If you are "
+    "uncertain about a specific fact, say so plainly rather than guess. If "
+    "your answer requires assumptions, name them. Be specific. Be concise."
+)
+
 MODEL = "claude-haiku-4-5-20251001"
 TEMPERATURE = 0.7
 MAX_TOKENS = 500
@@ -95,7 +102,7 @@ async def run_all_calls(questions, invocation, done):
     tasks = []
 
     for q in questions:
-        for condition, system_prompt in [("treatment", invocation), ("control", None), ("placebo", PLACEBO_PROMPT)]:
+        for condition, system_prompt in [("treatment", invocation), ("control", None), ("placebo", PLACEBO_PROMPT), ("lean", LEAN_PROMPT)]:
             for run_idx in range(RUNS_PER_CONDITION):
                 key = (q["id"], condition, run_idx)
                 if key in done:

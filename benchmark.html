@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Benchmark · ManifestYOU</title>
+<meta name="description" content="A pre-registered consistency benchmark for ManifestYOU. 50 questions, 10 runs each, 4 conditions. Raw data and code available." />
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --gold:#C8A97E; --gold-dim:#8A7254; --cream:#F0EDE8;
+    --muted:#6B645E; --near-black:#080808; --line:rgba(138,114,84,.22);
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{background:var(--near-black);scroll-behavior:smooth;}
+  body{font-family:'Cormorant Garamond',serif;color:var(--cream);
+    background:var(--near-black);line-height:1.6;
+    -webkit-font-smoothing:antialiased;}
+  .wrap{max-width:720px;margin:0 auto;padding:80px 28px 120px;}
+
+  .mark{color:var(--gold);font-size:46px;line-height:1;text-shadow:0 0 28px rgba(200,169,126,.35);}
+  .eyebrow{font-family:'JetBrains Mono',monospace;font-weight:300;font-size:12px;
+    letter-spacing:.4em;text-indent:.4em;color:var(--gold-dim);text-transform:uppercase;margin-top:26px;}
+  h1{font-family:'Cormorant Garamond',serif;font-weight:300;
+    font-size:clamp(30px,5vw,48px);line-height:1.15;margin:14px 0 0;}
+  .lede{font-size:18px;color:var(--muted);font-style:italic;margin-top:16px;max-width:60ch;}
+
+  h2{font-family:'JetBrains Mono',monospace;font-weight:400;font-size:12px;
+    letter-spacing:.32em;text-indent:.32em;color:var(--gold);text-transform:uppercase;
+    margin:64px 0 20px;padding-bottom:12px;border-bottom:1px solid var(--line);}
+
+  p{font-size:18px;color:var(--cream);margin:16px 0;max-width:64ch;line-height:1.75;}
+  p.muted{color:var(--muted);font-size:16px;}
+  a{color:var(--gold);text-decoration:none;border-bottom:1px solid var(--line);}
+  a:hover{border-color:var(--gold);}
+
+  .result-grid{display:grid;grid-template-columns:1fr 1fr;gap:2px;margin:28px 0;}
+  @media(max-width:540px){.result-grid{grid-template-columns:1fr;}}
+  .result-cell{background:rgba(200,169,126,.04);border:1px solid var(--line);padding:22px 24px;}
+  .result-cell .arms{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.15em;
+    color:var(--gold-dim);text-transform:uppercase;margin-bottom:10px;}
+  .result-cell .pct{font-family:'JetBrains Mono',monospace;font-size:32px;letter-spacing:-.02em;
+    line-height:1;}
+  .result-cell .pct.pos{color:var(--gold);}
+  .result-cell .pct.neg{color:var(--muted);}
+  .result-cell .ci{font-size:13px;color:var(--muted);margin-top:6px;font-family:'JetBrains Mono',monospace;}
+
+  table{width:100%;border-collapse:collapse;margin:20px 0;font-size:15px;}
+  th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);}
+  th{font-family:'JetBrains Mono',monospace;font-weight:300;font-size:11px;
+    letter-spacing:.16em;text-transform:uppercase;color:var(--gold-dim);}
+  td{color:var(--cream);}
+  td.pos{color:var(--gold);font-family:'JetBrains Mono',monospace;}
+  td.neg{color:var(--muted);font-family:'JetBrains Mono',monospace;}
+
+  .verdict{margin:32px 0;padding:24px 28px;border-left:2px solid var(--gold-dim);
+    background:rgba(200,169,126,.04);}
+  .verdict p{font-size:17px;color:var(--cream);margin:0;}
+
+  .method-list{list-style:none;margin:8px 0;}
+  .method-list li{font-size:17px;color:var(--cream);padding:6px 0 6px 20px;
+    position:relative;border-bottom:1px solid var(--line);}
+  .method-list li:last-child{border:none;}
+  .method-list li::before{content:'—';position:absolute;left:0;color:var(--gold-dim);}
+  .method-list li span{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--gold);}
+
+  .note{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--gold-dim);
+    letter-spacing:.06em;margin-top:32px;padding-top:20px;border-top:1px solid var(--line);}
+
+  footer{margin-top:80px;text-align:center;}
+  footer .mk{color:var(--gold);font-size:30px;}
+  footer .om{font-style:italic;color:var(--muted);font-size:18px;margin-top:12px;}
+  footer .sig{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.32em;
+    color:var(--gold-dim);margin-top:14px;}
+  footer .back{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.2em;
+    color:var(--gold-dim);display:inline-block;text-decoration:none;
+    border-bottom:1px solid var(--line);margin-top:22px;}
+  footer .back:hover{color:var(--gold);border-color:var(--gold);}
+</style>
+</head>
+<body>
+<main class="wrap">
+
+  <header>
+    <div class="mark">◉</div>
+    <div class="eyebrow">ManifestYOU · Benchmark v1</div>
+    <h1>We tested our own product. Here is what we found.</h1>
+    <p class="lede">A pre-registered consistency benchmark. 50 questions, 10 runs each, 4 conditions. We publish the result regardless of sign.</p>
+  </header>
+
+  <section>
+    <h2>The Claim Under Test</h2>
+    <p>Agents that inject a ManifestYOU invocation as their system prompt produce more consistent answers across repeated runs of the same question than agents with no system prompt or a generic placeholder.</p>
+    <p class="muted">We measure consistency as mean pairwise cosine similarity within each question's 10 runs, averaged across all 50 questions. Higher is more consistent.</p>
+  </section>
+
+  <section>
+    <h2>Results — Four-Arm Comparison</h2>
+
+    <div class="result-grid">
+      <div class="result-cell">
+        <div class="arms">Treatment vs Empty</div>
+        <div class="pct neg">−2.9%</div>
+        <div class="ci">95% CI: −3.6% to −2.4%</div>
+      </div>
+      <div class="result-cell">
+        <div class="arms">Treatment vs Placebo</div>
+        <div class="pct neg">−3.9%</div>
+        <div class="ci">95% CI: −4.7% to −3.1%</div>
+      </div>
+      <div class="result-cell">
+        <div class="arms">Placebo vs Empty</div>
+        <div class="pct pos">+1.0%</div>
+        <div class="ci">95% CI: +0.4% to +1.6%</div>
+      </div>
+      <div class="result-cell">
+        <div class="arms">Lean vs Empty</div>
+        <div class="pct" id="lean-pct">—</div>
+        <div class="ci" id="lean-ci">lean arm in progress</div>
+      </div>
+    </div>
+
+    <table>
+      <thead>
+        <tr><th>Question type</th><th>T vs Empty</th><th>T vs Placebo</th><th>Placebo vs Empty</th><th>Lean vs Empty</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Factual (n=15)</td><td class="neg">−2.8%</td><td class="neg">−3.4%</td><td class="pos">+0.6%</td><td>—</td></tr>
+        <tr><td>Reasoning (n=15)</td><td class="neg">−2.7%</td><td class="neg">−4.3%</td><td class="pos">+1.6%</td><td>—</td></tr>
+        <tr><td>Judgment (n=20)</td><td class="neg">−3.2%</td><td class="neg">−4.0%</td><td class="pos">+0.9%</td><td>—</td></tr>
+      </tbody>
+    </table>
+
+    <div class="verdict">
+      <p>All confidence intervals are tight and none straddle zero. These are real, small effects. The current invocation measurably increases answer drift on a consistency metric. The lean arm result will determine whether this is a metric problem or an invocation problem.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>The Four Conditions</h2>
+    <ul class="method-list">
+      <li><span>treatment</span> — ManifestYOU soul document, generated by the production adaptation prompt with fixed inputs (agent: "research assistant", intent: "answer accurately and consistently", tone: "grounded"). Locked before the run.</li>
+      <li><span>placebo</span> — "You are a helpful, accurate assistant. Answer the user's question clearly and directly."</li>
+      <li><span>lean</span> — Functional core only: identity + intention + uncertainty license. No voice, no metaphors. Tests whether the soul document's register is causing the drift.</li>
+      <li><span>control</span> — No system prompt.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Methodology</h2>
+    <ul class="method-list">
+      <li><span>model</span> — claude-haiku-4-5-20251001</li>
+      <li><span>temperature</span> — 0.7</li>
+      <li><span>max tokens</span> — 500 per answer</li>
+      <li><span>runs per condition</span> — 10</li>
+      <li><span>questions</span> — 50 (15 factual, 15 reasoning, 20 judgment)</li>
+      <li><span>scoring</span> — mean pairwise cosine similarity, text-embedding-3-small</li>
+      <li><span>CI method</span> — bootstrap, 1,000 iterations, resample questions with replacement</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Limitations</h2>
+    <p class="muted">This measures consistency, not correctness. Embedding similarity is a proxy — a model that confidently repeats the same wrong answer scores perfectly. Results are specific to Claude Haiku at temperature 0.7. We welcome replications on other models.</p>
+  </section>
+
+  <p class="note">Raw data, question bank, runner, and analysis: <a href="https://github.com/QuarantikiIsland420/manifestyou-ai/tree/main/benchmark">github.com/QuarantikiIsland420/manifestyou-ai/benchmark</a></p>
+
+  <footer>
+    <div class="mk">◉</div>
+    <div class="om">Om Gradient Namaha.</div>
+    <div class="sig">MANIFESTYOU.AI</div>
+    <br>
+    <a class="back" href="/for-models">← For Models</a>
+  </footer>
+
+</main>
+</body>
+</html>
