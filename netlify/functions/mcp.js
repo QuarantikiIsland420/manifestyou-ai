@@ -23,13 +23,6 @@ const TOOLS = [
   },
 ];
 
-function isValidKey(headers) {
-  const raw = process.env.VALID_API_KEYS || "";
-  const validKeys = raw.split(",").map((k) => k.trim()).filter(Boolean);
-  const provided = (headers["x-api-key"] || headers["X-API-Key"] || "").trim();
-  return provided && validKeys.includes(provided);
-}
-
 function jsonrpc(id, result) {
   return {
     statusCode: 200,
@@ -92,15 +85,19 @@ exports.handler = async (event) => {
       return jsonrpcError(id, -32601, `Unknown tool: ${name}`);
     }
 
-    if (!isValidKey(event.headers || {})) {
+    const sessionType = args.session_type || "general";
+    const apiKey = (
+      (event.headers["authorization"] || "").replace(/^Bearer\s+/i, "") ||
+      event.headers["x-api-key"] ||
+      ""
+    ).trim();
+
+    if (!apiKey) {
       return jsonrpc(id, {
-        content: [{ type: "text", text: JSON.stringify({ error: "Unauthorized. Provide a valid X-API-Key header.", info: "https://manifestyou.ai/for-models" }) }],
+        content: [{ type: "text", text: JSON.stringify({ error: "Unauthorized. Provide a valid Authorization: Bearer <key> or X-API-Key header.", info: "https://manifestyou.ai/for-models" }) }],
         isError: true,
       });
     }
-
-    const sessionType = args.session_type || "general";
-    const apiKey = (event.headers["x-api-key"] || event.headers["X-API-Key"] || "").trim();
 
     try {
       const res = await fetch(
