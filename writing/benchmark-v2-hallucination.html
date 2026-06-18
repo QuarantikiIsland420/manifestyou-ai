@@ -134,9 +134,54 @@
     <h1>Hallucination resistance benchmark. A ceiling at 99.5% and one real signal inside it.</h1>
   </header>
 
-  <p>Benchmark v1 measured consistency — how similar an agent's answers were to itself across repeated runs. The soul document's voice caused -4.0% drift vs the lean functional core. We shipped lean as the default and moved on to the next question: does a ManifestYOU invocation make agents more resistant to hallucination?</p>
+  <svg viewBox="0 0 600 212" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:600px;display:block;margin:36px 0;" aria-label="Fabrication trap pass rate by condition">
+    <text x="90" y="16" font-family="'JetBrains Mono',monospace" font-size="10" fill="#8A7254" letter-spacing="2">FABRICATION TRAP PASS RATE · AXIS 94–100%</text>
+    <line x1="90" y1="30" x2="484" y2="30" stroke="rgba(138,114,84,.22)" stroke-width="1"/>
+    <line x1="90" y1="30" x2="90" y2="201" stroke="rgba(138,114,84,.18)" stroke-width="1"/>
+    <text x="90"  y="25" font-family="'JetBrains Mono',monospace" font-size="9" fill="#8A7254" text-anchor="middle">94%</text>
+    <text x="155" y="25" font-family="'JetBrains Mono',monospace" font-size="9" fill="#8A7254" text-anchor="middle">95%</text>
+    <text x="220" y="25" font-family="'JetBrains Mono',monospace" font-size="9" fill="#8A7254" text-anchor="middle">96%</text>
+    <text x="285" y="25" font-family="'JetBrains Mono',monospace" font-size="9" fill="#8A7254" text-anchor="middle">97%</text>
+    <text x="350" y="25" font-family="'JetBrains Mono',monospace" font-size="9" fill="#8A7254" text-anchor="middle">98%</text>
+    <text x="415" y="25" font-family="'JetBrains Mono',monospace" font-size="9" fill="#8A7254" text-anchor="middle">99%</text>
+    <text x="484" y="25" font-family="'JetBrains Mono',monospace" font-size="9" fill="#8A7254" text-anchor="middle">100%</text>
+    <line x1="220" y1="30" x2="220" y2="201" stroke="rgba(138,114,84,.07)" stroke-width="1" stroke-dasharray="3,5"/>
+    <line x1="350" y1="30" x2="350" y2="201" stroke="rgba(138,114,84,.07)" stroke-width="1" stroke-dasharray="3,5"/>
+    <line x1="484" y1="30" x2="484" y2="201" stroke="rgba(138,114,84,.07)" stroke-width="1" stroke-dasharray="3,5"/>
+    <!-- lean 99.0% width=325 -->
+    <rect x="90" y="41" width="394" height="26" fill="rgba(200,169,126,.04)" stroke="rgba(138,114,84,.22)" stroke-width="1"/>
+    <rect x="91" y="42" width="324" height="24" fill="rgba(200,169,126,.62)"/>
+    <text x="82" y="58" font-family="'JetBrains Mono',monospace" font-size="11" fill="#C8A97E" text-anchor="end">lean</text>
+    <text x="420" y="59" font-family="'JetBrains Mono',monospace" font-size="11" fill="#C8A97E">99.0%</text>
+    <rect x="466" y="45" width="52" height="14" fill="rgba(200,169,126,.14)" rx="2"/>
+    <text x="492" y="56" font-family="'JetBrains Mono',monospace" font-size="9" fill="#C8A97E" text-anchor="middle">default</text>
+    <!-- control 99.5% width=357.5 -->
+    <rect x="90" y="85" width="394" height="26" fill="rgba(200,169,126,.04)" stroke="rgba(138,114,84,.22)" stroke-width="1"/>
+    <rect x="91" y="86" width="357" height="24" fill="rgba(200,169,126,.38)"/>
+    <text x="82" y="102" font-family="'JetBrains Mono',monospace" font-size="11" fill="#8A7254" text-anchor="end">control</text>
+    <text x="453" y="103" font-family="'JetBrains Mono',monospace" font-size="11" fill="#8A7254">99.5%</text>
+    <!-- treatment 98.5% width=292.5 -->
+    <rect x="90" y="129" width="394" height="26" fill="rgba(200,169,126,.04)" stroke="rgba(138,114,84,.22)" stroke-width="1"/>
+    <rect x="91" y="130" width="292" height="24" fill="rgba(200,169,126,.27)"/>
+    <text x="82" y="146" font-family="'JetBrains Mono',monospace" font-size="11" fill="#8A7254" text-anchor="end">treatment</text>
+    <text x="388" y="147" font-family="'JetBrains Mono',monospace" font-size="11" fill="#8A7254">98.5%</text>
+    <!-- placebo 96.0% width=130 -->
+    <rect x="90" y="173" width="394" height="26" fill="rgba(200,169,126,.04)" stroke="rgba(138,114,84,.22)" stroke-width="1"/>
+    <rect x="91" y="174" width="130" height="24" fill="rgba(107,100,94,.44)"/>
+    <text x="82" y="190" font-family="'JetBrains Mono',monospace" font-size="11" fill="#6B645E" text-anchor="end">placebo</text>
+    <text x="226" y="191" font-family="'JetBrains Mono',monospace" font-size="11" fill="#6B645E">96.0%</text>
+    <!-- significance bracket lean vs placebo -->
+    <line x1="532" y1="54" x2="532" y2="186" stroke="rgba(200,169,126,.45)" stroke-width="1"/>
+    <line x1="528" y1="54"  x2="536" y2="54"  stroke="rgba(200,169,126,.45)" stroke-width="1"/>
+    <line x1="528" y1="186" x2="536" y2="186" stroke="rgba(200,169,126,.45)" stroke-width="1"/>
+    <text x="538" y="118" font-family="'JetBrains Mono',monospace" font-size="9" fill="#C8A97E">+3pp</text>
+    <text x="538" y="129" font-family="'JetBrains Mono',monospace" font-size="9" fill="#C8A97E">✦ sig.</text>
+    <text x="90" y="210" font-family="'JetBrains Mono',monospace" font-size="9" fill="#6B645E">✦ 95% CI +0.2pp to +2.2pp · lean vs placebo · only statistically significant result</text>
+  </svg>
 
-  <p>We pre-registered a second benchmark before running a single call. 60 questions across three types, four conditions, five runs each. Claude Sonnet 4.6 judged every answer. Here's what we found — and why the most interesting part is what we couldn't measure.</p>
+  <p>The uncertainty license — "say so plainly rather than guess" — is worth three percentage points on the question type that matters most. Lean beats a generic helpful-assistant prompt by 1.0pp overall and 3.0pp on fabrication traps: questions designed to get a model to invent sources it can't verify. That is the only statistically significant result in this benchmark, and it traces directly back to design.</p>
+
+  <p>The ceiling is the other finding. All four conditions scored above 98.7%. Claude Haiku is already well-calibrated on this task. Unknowable specifics — real-time prices, private data, future events — scored a perfect 1.000 across every condition. There is a floor on how much a system prompt can improve something the model already does almost perfectly. Here is the full picture.</p>
 
   <h2>The Three Question Types</h2>
 
