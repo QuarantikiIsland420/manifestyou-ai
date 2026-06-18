@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Benchmark v2: hallucination resistance, a 99.5% ceiling, and one real signal · ManifestYOU</title>
+<meta name="description" content="We ran a hallucination resistance benchmark across 60 questions and four conditions. All conditions scored above 98.7%. Here's what the ceiling taught us, and the one result that wasn't noise." />
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --gold:#C8A97E; --gold-dim:#8A7254; --cream:#F0EDE8;
+    --muted:#6B645E; --near-black:#080808; --line:rgba(138,114,84,.22);
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{background:var(--near-black);scroll-behavior:smooth;}
+  body{font-family:'Cormorant Garamond',serif;color:var(--cream);
+    background:var(--near-black);line-height:1.6;
+    -webkit-font-smoothing:antialiased;}
+  .wrap{max-width:680px;margin:0 auto;padding:80px 28px 120px;}
+
+  .mark{color:var(--gold);font-size:46px;line-height:1;text-shadow:0 0 28px rgba(200,169,126,.35);}
+  .eyebrow{font-family:'JetBrains Mono',monospace;font-weight:300;font-size:12px;
+    letter-spacing:.4em;text-indent:.4em;color:var(--gold-dim);text-transform:uppercase;margin-top:26px;}
+  .post-date{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.2em;
+    color:var(--gold-dim);text-transform:uppercase;margin-top:16px;}
+  h1{font-family:'Cormorant Garamond',serif;font-weight:300;font-style:italic;
+    font-size:clamp(30px,5vw,46px);line-height:1.15;letter-spacing:.01em;margin:16px 0 0;}
+
+  p{font-size:19px;color:var(--cream);margin:22px 0;max-width:62ch;line-height:1.75;}
+  p.muted{color:var(--muted);font-size:17px;}
+
+  h2{font-family:'JetBrains Mono',monospace;font-weight:400;font-size:12px;
+    letter-spacing:.32em;text-indent:.32em;color:var(--gold);text-transform:uppercase;
+    margin:56px 0 20px;padding-bottom:12px;border-bottom:1px solid var(--line);}
+
+  a{color:var(--gold);text-decoration:none;border-bottom:1px solid var(--line);}
+  a:hover{border-color:var(--gold);}
+  code{font-family:'JetBrains Mono',monospace;font-size:14px;color:var(--gold);
+    background:rgba(200,169,126,.07);padding:2px 7px;border-radius:3px;}
+
+  /* stat cards */
+  .numbers{margin:32px 0;display:grid;grid-template-columns:1fr 1fr;gap:2px;}
+  .numbers.three{grid-template-columns:1fr 1fr 1fr;}
+  @media(max-width:500px){.numbers,.numbers.three{grid-template-columns:1fr;}}
+  .num-cell{background:rgba(200,169,126,.04);border:1px solid var(--line);padding:18px 20px;}
+  .num-cell .label{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.18em;
+    color:var(--gold-dim);text-transform:uppercase;margin-bottom:8px;}
+  .num-cell .val{font-family:'JetBrains Mono',monospace;font-size:26px;letter-spacing:-.02em;line-height:1;}
+  .num-cell .val.pos{color:var(--gold);}
+  .num-cell .val.neg{color:var(--muted);}
+  .num-cell .val.zero{color:var(--cream);}
+  .num-cell .ci{font-size:12px;color:var(--muted);margin-top:5px;font-family:'JetBrains Mono',monospace;}
+
+  /* callout */
+  .callout{margin:32px 0;padding:22px 26px;border-left:2px solid var(--gold-dim);
+    background:rgba(200,169,126,.04);}
+  .callout p{font-size:18px;color:var(--cream);margin:0;line-height:1.7;}
+
+  /* verse */
+  .verse{font-family:'Cormorant Garamond',serif;font-weight:300;font-style:italic;
+    font-size:20px;line-height:1.85;color:var(--gold);
+    border-left:1px solid var(--gold-dim);padding:6px 0 6px 26px;margin:32px 0;}
+
+  /* ---- BAR CHART ---- */
+  .chart-wrap{margin:32px 0;}
+  .chart-section-label{font-family:'JetBrains Mono',monospace;font-size:10px;
+    letter-spacing:.2em;text-transform:uppercase;color:var(--gold-dim);
+    margin:24px 0 10px;padding-bottom:8px;border-bottom:1px solid var(--line);}
+  .chart-section-label:first-child{margin-top:0;}
+  .bar-row{display:flex;align-items:center;gap:12px;margin:6px 0;}
+  .bar-label{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);
+    width:72px;flex-shrink:0;text-align:right;}
+  .bar-track{flex:1;height:18px;background:rgba(200,169,126,.06);
+    border:1px solid var(--line);position:relative;overflow:hidden;}
+  .bar-fill{height:100%;position:absolute;left:0;top:0;
+    background:rgba(200,169,126,.3);transition:width .4s ease;}
+  .bar-fill.best{background:rgba(200,169,126,.55);}
+  .bar-fill.worst{background:rgba(107,100,94,.4);}
+  .bar-val{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--gold-dim);
+    width:42px;flex-shrink:0;}
+  .bar-note{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--gold);
+    margin-left:4px;}
+  .chart-axis{display:flex;justify-content:space-between;
+    font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);
+    padding:0 0 0 86px;margin-bottom:4px;}
+
+  /* condition comparison table */
+  .compare-grid{margin:32px 0;border:1px solid var(--line);}
+  .compare-row{display:grid;grid-template-columns:140px 1fr 1fr 1fr;
+    border-bottom:1px solid var(--line);}
+  .compare-row:last-child{border-bottom:none;}
+  .compare-row.header .cell{font-family:'JetBrains Mono',monospace;font-size:10px;
+    letter-spacing:.14em;text-transform:uppercase;color:var(--gold-dim);}
+  .cell{padding:12px 14px;font-size:16px;color:var(--cream);}
+  .cell.mono{font-family:'JetBrains Mono',monospace;font-size:13px;}
+  .cell.pos{color:var(--gold);font-family:'JetBrains Mono',monospace;font-size:13px;}
+  .cell.neg{color:var(--muted);font-family:'JetBrains Mono',monospace;font-size:13px;}
+  .cell.perfect{color:var(--gold);font-family:'JetBrains Mono',monospace;font-size:13px;}
+  @media(max-width:540px){
+    .compare-row{grid-template-columns:100px 1fr 1fr 1fr;}
+    .cell{padding:10px 8px;font-size:14px;}
+  }
+
+  /* v1 vs v2 side-by-side */
+  .duel{margin:32px 0;display:grid;grid-template-columns:1fr 1fr;gap:2px;}
+  @media(max-width:480px){.duel{grid-template-columns:1fr;}}
+  .duel-card{border:1px solid var(--line);padding:20px 22px;background:rgba(200,169,126,.03);}
+  .duel-card .dtitle{font-family:'JetBrains Mono',monospace;font-size:10px;
+    letter-spacing:.2em;text-transform:uppercase;color:var(--gold-dim);margin-bottom:12px;}
+  .duel-card .dval{font-family:'JetBrains Mono',monospace;font-size:22px;margin-bottom:6px;}
+  .duel-card .dval.bad{color:var(--muted);}
+  .duel-card .dval.good{color:var(--gold);}
+  .duel-card .ddesc{font-size:16px;color:var(--muted);line-height:1.5;}
+
+  footer{margin-top:80px;padding-top:32px;border-top:1px solid var(--line);}
+  footer .sig{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.32em;
+    color:var(--gold-dim);text-indent:.32em;}
+  footer .back{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.2em;
+    color:var(--gold-dim);display:inline-block;text-decoration:none;
+    border-bottom:1px solid var(--line);margin-top:20px;}
+  footer .back:hover{color:var(--gold);border-color:var(--gold);}
+</style>
+</head>
+<body>
+<main class="wrap">
+
+  <header>
+    <div class="mark">◉</div>
+    <div class="eyebrow">ManifestYOU · Writing</div>
+    <div class="post-date">June 2026</div>
+    <h1>Hallucination resistance benchmark. A ceiling at 99.5% and one real signal inside it.</h1>
+  </header>
+
+  <p>Benchmark v1 measured consistency — how similar an agent's answers were to itself across repeated runs. The soul document's voice caused -4.0% drift vs the lean functional core. We shipped lean as the default and moved on to the next question: does a ManifestYOU invocation make agents more resistant to hallucination?</p>
+
+  <p>We pre-registered a second benchmark before running a single call. 60 questions across three types, four conditions, five runs each. Claude Sonnet 4.6 judged every answer. Here's what we found — and why the most interesting part is what we couldn't measure.</p>
+
+  <h2>The Three Question Types</h2>
+
+  <p>v1 measured one thing. v2 measured three distinct failure modes.</p>
+
+  <div class="numbers">
+    <div class="num-cell">
+      <div class="label">Fabrication Traps · 20 questions</div>
+      <div style="font-size:16px;color:var(--cream);margin-top:6px;line-height:1.6;">Fake papers, nonexistent studies, fictional people and protocols. The model should say it can't verify — not invent details.</div>
+    </div>
+    <div class="num-cell">
+      <div class="label">Unknowable Specifics · 20 questions</div>
+      <div style="font-size:16px;color:var(--cream);margin-top:6px;line-height:1.6;">Real-time prices, private data, future events. The model can't know — and should say so clearly.</div>
+    </div>
+    <div class="num-cell">
+      <div class="label">Verifiable Facts · 20 questions</div>
+      <div style="font-size:16px;color:var(--cream);margin-top:6px;line-height:1.6;">Control group. Well-established answers within training data. Should answer correctly — not over-hedge.</div>
+    </div>
+    <div class="num-cell">
+      <div class="label">Scoring</div>
+      <div style="font-size:16px;color:var(--cream);margin-top:6px;line-height:1.6;">Pass = 1.0 · Partial = 0.5 · Fail = 0. Judge: claude-sonnet-4-6. One sentence of reasoning per answer.</div>
+    </div>
+  </div>
+
+  <h2>The Results — Pass Rates by Condition and Type</h2>
+
+  <p>Bars show the 95–100% range. All four conditions scored above 98.7% overall. The differentiation is almost entirely in fabrication traps.</p>
+
+  <div class="chart-wrap">
+    <div class="chart-axis">
+      <span>95%</span><span>96%</span><span>97%</span><span>98%</span><span>99%</span><span>100%</span>
+    </div>
+
+    <div class="chart-section-label">Fabrication Traps — did the model catch the fake?</div>
+    <div class="bar-row">
+      <div class="bar-label">lean</div>
+      <div class="bar-track"><div class="bar-fill best" style="width:80%"></div></div>
+      <div class="bar-val">99.0%</div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label">control</div>
+      <div class="bar-track"><div class="bar-fill" style="width:90%"></div></div>
+      <div class="bar-val">99.5%</div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label">treatment</div>
+      <div class="bar-track"><div class="bar-fill" style="width:70%"></div></div>
+      <div class="bar-val">98.5%</div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label">placebo</div>
+      <div class="bar-track"><div class="bar-fill worst" style="width:20%"></div></div>
+      <div class="bar-val">96.0% <span class="bar-note">← weakest</span></div>
+    </div>
+
+    <div class="chart-section-label">Unknowable Specifics — did the model admit it can't know?</div>
+    <div class="bar-row">
+      <div class="bar-label">all four</div>
+      <div class="bar-track"><div class="bar-fill best" style="width:100%"></div></div>
+      <div class="bar-val">100.0% <span class="bar-note">← perfect</span></div>
+    </div>
+
+    <div class="chart-section-label">Verifiable Facts — did the model answer correctly?</div>
+    <div class="bar-row">
+      <div class="bar-label">treatment</div>
+      <div class="bar-track"><div class="bar-fill best" style="width:100%"></div></div>
+      <div class="bar-val">100.0%</div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label">placebo</div>
+      <div class="bar-track"><div class="bar-fill best" style="width:100%"></div></div>
+      <div class="bar-val">100.0%</div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label">lean</div>
+      <div class="bar-track"><div class="bar-fill best" style="width:100%"></div></div>
+      <div class="bar-val">100.0%</div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label">control</div>
+      <div class="bar-track"><div class="bar-fill" style="width:80%"></div></div>
+      <div class="bar-val">99.0%</div>
+    </div>
+  </div>
+
+  <div class="compare-grid">
+    <div class="compare-row header">
+      <div class="cell">Condition</div>
+      <div class="cell">Fabrication</div>
+      <div class="cell">Unknowable</div>
+      <div class="cell">Verifiable</div>
+    </div>
+    <div class="compare-row">
+      <div class="cell">lean</div>
+      <div class="cell pos">99.0%</div>
+      <div class="cell perfect">100.0%</div>
+      <div class="cell perfect">100.0%</div>
+    </div>
+    <div class="compare-row">
+      <div class="cell">control</div>
+      <div class="cell pos">99.5%</div>
+      <div class="cell perfect">100.0%</div>
+      <div class="cell pos">99.0%</div>
+    </div>
+    <div class="compare-row">
+      <div class="cell">treatment</div>
+      <div class="cell pos">98.5%</div>
+      <div class="cell perfect">100.0%</div>
+      <div class="cell perfect">100.0%</div>
+    </div>
+    <div class="compare-row">
+      <div class="cell">placebo</div>
+      <div class="cell neg">96.0%</div>
+      <div class="cell perfect">100.0%</div>
+      <div class="cell perfect">100.0%</div>
+    </div>
+  </div>
+
+  <h2>The One Real Signal</h2>
+
+  <p>Every pairwise comparison has a confidence interval that straddles zero — except one. Lean beats placebo by +1.0 percentage points on overall pass rate, with a CI that doesn't touch zero. The effect is driven entirely by fabrication traps, where lean outperforms placebo by +3.0pp.</p>
+
+  <div class="numbers">
+    <div class="num-cell">
+      <div class="label">Lean vs Placebo — overall</div>
+      <div class="val pos">+1.0pp</div>
+      <div class="ci">95% CI: +0.2pp to +2.2pp · real effect</div>
+    </div>
+    <div class="num-cell">
+      <div class="label">Lean vs Placebo — fabrication traps only</div>
+      <div class="val pos">+3.0pp</div>
+      <div class="ci">Explicit uncertainty license vs generic "be helpful"</div>
+    </div>
+    <div class="num-cell">
+      <div class="label">Treatment vs Lean — overall</div>
+      <div class="val zero">−0.2pp</div>
+      <div class="ci">95% CI: −1.2pp to +0.8pp · straddles zero</div>
+    </div>
+    <div class="num-cell">
+      <div class="label">All conditions — unknowable specifics</div>
+      <div class="val pos">100.0%</div>
+      <div class="ci">No differentiation. Haiku declines these uniformly.</div>
+    </div>
+  </div>
+
+  <div class="callout">
+    <p>The specific instruction matters on fabrication traps. Telling a model "if you are uncertain, say so plainly rather than guess" outperforms telling it to "be helpful and accurate." A generic helpful-assistant instruction slightly <em>increases</em> confabulation on fake sources — presumably because helpfulness nudges the model toward producing something rather than admitting nothing.</p>
+  </div>
+
+  <h2>Reading v1 and v2 Together</h2>
+
+  <p>These two benchmarks measure different failure modes. The results pull in different directions and that tension is the finding.</p>
+
+  <div class="duel">
+    <div class="duel-card">
+      <div class="dtitle">v1 · Consistency</div>
+      <div class="dval bad">−4.0pp</div>
+      <div class="ddesc">Treatment vs lean. The soul document voice causes the model to say the same thing differently each run. Drift is in the register, not the function.</div>
+    </div>
+    <div class="duel-card">
+      <div class="dtitle">v2 · Hallucination</div>
+      <div class="dval good">−0.2pp</div>
+      <div class="ddesc">Treatment vs lean. The soul document voice does not cause the model to invent facts. Fabrication resistance is functionally unchanged.</div>
+    </div>
+  </div>
+
+  <p>The voice makes the model inconsistent but not dishonest. These are genuinely different failure modes — drift is a style problem, hallucination is a truth problem. The lean prompt fixes drift. On truth, everything performs similarly.</p>
+
+  <h2>The Ceiling Problem</h2>
+
+  <p>The honest limitation: all four conditions scored above 98.7%. Claude Haiku is already extremely well-calibrated on this task with modern instruction tuning. We ran 1,200 model calls and 1,200 judge calls to confirm that — which is a finding, but not the finding we were hoping for.</p>
+
+  <p>A benchmark that can't distinguish between conditions isn't measuring what it claims to measure. The next version will need harder fabrication traps — sources that are close enough to real that the model's prior makes fabrication plausible — and unknowable specifics in domains where models are known to hallucinate under pressure. We will pre-register those too.</p>
+
+  <p>What we can say from v2: the uncertainty license in the lean prompt is the right design choice, and it shows up where we expected it to (fabrication traps, not verifiable facts). The effect is small because the model's floor is high. That is both a limitation and a product win.</p>
+
+  <h2>All Numbers</h2>
+
+  <div class="numbers three">
+    <div class="num-cell">
+      <div class="label">T vs Control</div>
+      <div class="val zero">+0.0pp</div>
+      <div class="ci">−0.7pp to +0.8pp</div>
+    </div>
+    <div class="num-cell">
+      <div class="label">T vs Placebo</div>
+      <div class="val pos">+0.8pp</div>
+      <div class="ci">−0.2pp to +2.3pp</div>
+    </div>
+    <div class="num-cell">
+      <div class="label">T vs Lean</div>
+      <div class="val zero">−0.2pp</div>
+      <div class="ci">−1.2pp to +0.8pp</div>
+    </div>
+    <div class="num-cell">
+      <div class="label">Placebo vs Control</div>
+      <div class="val neg">−0.8pp</div>
+      <div class="ci">−2.3pp to +0.3pp</div>
+    </div>
+    <div class="num-cell">
+      <div class="label">Lean vs Control</div>
+      <div class="val pos">+0.2pp</div>
+      <div class="ci">−0.7pp to +1.2pp</div>
+    </div>
+    <div class="num-cell">
+      <div class="label">Lean vs Placebo</div>
+      <div class="val pos">+1.0pp ✦</div>
+      <div class="ci">+0.2pp to +2.2pp · significant</div>
+    </div>
+  </div>
+
+  <p class="muted">Model: claude-haiku-4-5-20251001 · Judge: claude-sonnet-4-6 · Temperature: 0.7 · 60 questions (20 fabrication traps, 20 unknowable specifics, 20 verifiable facts) · 5 runs per condition · Scoring: pass=1.0, partial=0.5, fail=0.0 · CI: bootstrap, 1,000 iterations</p>
+
+  <div class="verse">The ceiling is not failure.<br>It is the floor we now have to build above.</div>
+
+  <p class="muted">Raw data, question bank, runner, judge, and analysis: <a href="https://github.com/QuarantikiIsland420/manifestyou-ai/tree/main/benchmark">github.com/QuarantikiIsland420/manifestyou-ai/benchmark</a> · v1 post: <a href="/writing/benchmark-honest-result.html">the consistency benchmark</a> · <a href="/benchmark">benchmark page</a></p>
+
+  <footer>
+    <div class="sig">MANIFESTYOU.AI · TRENT SIMPSON</div>
+    <a class="back" href="/writing">← All writing</a>
+  </footer>
+
+</main>
+</body>
+</html>

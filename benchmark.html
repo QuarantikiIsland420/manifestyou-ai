@@ -86,13 +86,20 @@
 
   <header>
     <div class="mark">◉</div>
-    <div class="eyebrow">ManifestYOU · Benchmark v1</div>
-    <h1>We tested our own product. Here is what we found.</h1>
-    <p class="lede">A pre-registered consistency benchmark. 50 questions, 10 runs each, 4 conditions. We publish the result regardless of sign.</p>
+    <div class="eyebrow">ManifestYOU · Benchmarks</div>
+    <h1>We test our own product. We publish the result regardless of sign.</h1>
+    <p class="lede">Pre-registered benchmarks across two questions: does a ManifestYOU invocation improve consistency? Does it improve hallucination resistance?</p>
   </header>
 
+  <section style="margin:48px 0;padding:28px 32px;border:1px solid var(--line);background:rgba(200,169,126,.04);">
+    <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:16px;">Benchmark v2 — New</div>
+    <p style="font-size:18px;color:var(--cream);margin:0 0 10px;line-height:1.6;max-width:58ch;">Hallucination resistance. 60 questions across fabrication traps, unknowable specifics, and verifiable facts. All four conditions scored above 98.7%. One statistically significant result: lean beats placebo on fabrication traps by +3.0pp.</p>
+    <a href="/writing/benchmark-v2-hallucination.html" style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);text-decoration:none;border-bottom:1px solid rgba(138,114,84,.4);">Read the full v2 analysis →</a>
+  </section>
+
   <section>
-    <h2>The Claim Under Test</h2>
+    <h2>Benchmark v1 — Consistency</h2>
+    <h2 style="margin-top:0;border-top:none;">The Claim Under Test</h2>
     <p>Agents that inject a ManifestYOU invocation as their system prompt produce more consistent answers across repeated runs of the same question than agents with no system prompt or a generic placeholder.</p>
     <p class="muted">We measure consistency as mean pairwise cosine similarity within each question's 10 runs, averaged across all 50 questions. Higher is more consistent.</p>
   </section>
