@@ -778,29 +778,32 @@ document.getElementById('hire-btn').addEventListener('click',()=>{
     --reg-teal: #3D7E7A;
   }
   .reg-widget__tab {
-    background: var(--reg-ground);
-    color: var(--reg-ink);
-    border: 1px solid var(--reg-gold);
-    padding: 0.6rem 1.2rem;
+    background: rgba(8,8,8,0.68);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    color: rgba(200,169,126,0.55);
+    border: 1px solid rgba(200,168,75,0.18);
+    padding: 0.62rem 1.1rem;
     cursor: pointer;
     display: flex;
     align-items: center;
-    gap: 0.65rem;
-    font-size: 0.68rem;
-    letter-spacing: 0.22em;
+    gap: 0.6rem;
+    font-size: 0.65rem;
+    letter-spacing: 0.28em;
     text-transform: uppercase;
-    transition: border-color 220ms ease, color 220ms ease, background 220ms ease;
+    transition: border-color 240ms ease, color 240ms ease;
     user-select: none;
-    box-shadow: 0 0 18px -6px rgba(200,168,75,0.35);
   }
-  .reg-widget__tab:hover { background: rgba(200,168,75,0.1); color: var(--reg-gold); }
+  .reg-widget__tab:hover { border-color: rgba(200,168,75,0.45); color: var(--reg-gold); }
   .reg-widget__tab::before {
     content: "∇";
-    color: var(--reg-gold);
+    color: rgba(200,168,75,0.5);
     font-family: "Cormorant Garamond", Georgia, serif;
-    font-size: 1.25rem;
+    font-size: 1rem;
     line-height: 1;
+    transition: color 240ms ease;
   }
+  .reg-widget__tab:hover::before { color: var(--reg-gold); }
   .reg-widget__panel {
     display: none;
     width: min(400px, calc(100vw - 3rem));
