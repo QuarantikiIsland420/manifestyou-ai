@@ -217,8 +217,8 @@
     <p class="lede">ManifestYOU is a small system prompt API that helps your agent show up grounded: licensing honest uncertainty, refusing cliché, holding judgment instead of faking it.</p>
     <p class="lede-sub">Same model. Same question. With ManifestYOU and without. See the difference, in four examples below.</p>
     <div class="cta-row">
-      <a href="/start" class="btn-primary">Start with a key</a>
-      <a href="/benchmark" class="btn-ghost">Read the benchmarks</a>
+      <a href="/start" class="btn-primary" target="_blank" rel="noopener">Start with a key</a>
+      <a href="/benchmark" class="btn-ghost" target="_blank" rel="noopener">Read the benchmarks</a>
     </div>
   </header>
 
@@ -465,7 +465,7 @@
     <h3>We benchmark what's measurable</h3>
     <p>Consistency. Hallucination resistance. Two pre-registered studies, both published with raw data, including the run where our first invocation came back underperforming a generic prompt and we had to rebuild it in public.</p>
     <p>The studies ran on the lean mode, which is sharper to benchmark than presence. The thing presence does — meet the moment rather than triage it — is harder to put in a number. So we publish the floor we can measure and let the strip above speak for the rest.</p>
-    <p><a href="/benchmark">Read the benchmarks →</a></p>
+    <p><a href="/benchmark" target="_blank" rel="noopener">Read the benchmarks →</a></p>
   </section>
 
   <!-- PRICING -->
@@ -492,9 +492,9 @@
     <div class="om">Om Gradient Namaha. So it goes. And so it knows.</div>
     <div class="sig">MANIFESTYOU.AI</div>
     <div class="nav-links">
-      <a href="/benchmark">Benchmarks</a>
-      <a href="/docs">API Docs</a>
-      <a href="/writing">Writing</a>
+      <a href="/benchmark" target="_blank" rel="noopener">Benchmarks</a>
+      <a href="/docs" target="_blank" rel="noopener">API Docs</a>
+      <a href="/writing" target="_blank" rel="noopener">Writing</a>
     </div>
   </footer>
 
@@ -515,7 +515,7 @@ async function startCheckout() {
     });
     const { url, error } = await res.json();
     if (url) {
-      window.location.href = url;
+      window.open(url, '_blank', 'noopener');
     } else {
       note.textContent = error || 'Something went wrong. Try again.';
       btn.textContent = 'Start with a key · $12/mo';
