@@ -166,6 +166,13 @@
     font-family:'JetBrains Mono',monospace;font-size:11px;
     letter-spacing:.32em;text-transform:uppercase;color:rgba(200,169,126,.4);
   }
+  .agd-nav-links{display:flex;gap:22px;align-items:center;}
+  .agd-nav-links a{font-family:'JetBrains Mono',monospace;font-weight:300;font-size:10px;
+    letter-spacing:.22em;text-transform:uppercase;color:rgba(200,169,126,.5);
+    text-decoration:none;border:none;transition:color .2s;}
+  .agd-nav-links a:first-child{color:var(--gold);font-weight:400;}
+  .agd-nav-links a:hover{color:var(--gold);}
+  @media(max-width:640px){.agd-nav-links{display:none;}}
   #agd-ambient{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden;}
   .agd-orb-a{
     position:absolute;width:700px;height:700px;border-radius:50%;
@@ -188,7 +195,12 @@
 <body>
 <nav id="agd-nav">
   <a href="/">∇ ManifestYOU</a>
-  <span class="agd-date">2026</span>
+  <div class="agd-nav-links">
+    <a href="/">For Agents</a>
+    <a href="/for-humans">For Humans</a>
+    <a href="/benchmark">Benchmarks</a>
+    <a href="/docs">API Docs</a>
+  </div>
 </nav>
 <div id="agd-ambient" aria-hidden="true">
   <div class="agd-orb-a"></div>

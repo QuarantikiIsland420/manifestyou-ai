@@ -7,3 +7,9 @@
 
 [functions.invoke]
   timeout = 15
+
+[[redirects]]
+  from = "/for-models"
+  to = "/"
+  status = 301
+  force = true
