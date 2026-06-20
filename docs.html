@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Docs · ManifestYOU API</title>
+<meta name="description" content="API reference, authentication, request parameters, response shape, error codes, and system architecture for the ManifestYOU invocation API.">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=JetBrains+Mono:wght@200;300;400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #C8A97E;
+    --gold-dim: #8A7254;
+    --gold-faint: rgba(200,169,126,0.10);
+    --gold-border: rgba(200,169,126,0.22);
+    --cream: #F0EDE8;
+    --muted: #5A5450;
+    --near-black: #080808;
+    --surface: #0D0D0B;
+    --surface-2: #141410;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { background: var(--near-black); scroll-behavior: smooth; }
+  body {
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 300;
+    background: var(--near-black);
+    color: #908070;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* layout */
+  .layout { display: flex; min-height: 100vh; }
+
+  /* sidebar nav */
+  .sidebar {
+    width: 220px;
+    flex-shrink: 0;
+    padding: 56px 0 80px 32px;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+    border-right: 1px solid var(--gold-border);
+  }
+  .sidebar-logo {
+    font-size: 10px;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 40px;
+    display: block;
+    text-decoration: none;
+  }
+  .sidebar-logo:hover { color: var(--cream); }
+  .nav-group { margin-bottom: 32px; }
+  .nav-group-label {
+    font-size: 9px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold-dim);
+    margin-bottom: 10px;
+    display: block;
+  }
+  .nav-link {
+    display: block;
+    font-size: 11px;
+    color: #706050;
+    text-decoration: none;
+    padding: 4px 0;
+    letter-spacing: 0.04em;
+    transition: color 0.15s;
+  }
+  .nav-link:hover { color: var(--gold); }
+  .nav-link.active { color: var(--cream); }
+
+  /* main content */
+  .main { flex: 1; padding: 56px 48px 120px; max-width: 760px; }
+
+  .eyebrow {
+    font-size: 9px;
+    letter-spacing: 0.36em;
+    text-transform: uppercase;
+    color: var(--gold-dim);
+    margin-bottom: 16px;
+  }
+  h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(28px, 3.5vw, 40px);
+    font-weight: 300;
+    color: var(--cream);
+    line-height: 1.2;
+    letter-spacing: 0.02em;
+    margin-bottom: 12px;
+  }
+  .tagline {
+    font-size: 11px;
+    color: var(--gold);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    margin-bottom: 56px;
+  }
+
+  /* sections */
+  .section { margin-bottom: 64px; }
+  h2 {
+    font-size: 10px;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: var(--gold);
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--gold-border);
+    margin-bottom: 24px;
+  }
+  p {
+    font-size: 12px;
+    line-height: 1.95;
+    color: #908070;
+    margin-bottom: 20px;
+  }
+  p:last-child { margin-bottom: 0; }
+
+  /* code blocks */
+  .code-block {
+    background: var(--surface);
+    border: 1px solid var(--gold-border);
+    border-radius: 3px;
+    padding: 20px 24px;
+    margin: 24px 0;
+    overflow-x: auto;
+  }
+  .code-block pre {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11.5px;
+    font-weight: 300;
+    line-height: 1.8;
+    color: #A09080;
+    white-space: pre;
+  }
+  .code-block .k { color: var(--gold-dim); }
+  .code-block .s { color: var(--cream); }
+  .code-block .c { color: #504840; }
+  .code-block .label {
+    font-size: 9px;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--gold-dim);
+    margin-bottom: 14px;
+  }
+
+  /* inline code */
+  code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--gold);
+    background: var(--gold-faint);
+    padding: 2px 6px;
+    border-radius: 2px;
+  }
+
+  /* param table */
+  .param-table { width: 100%; border-collapse: collapse; margin: 24px 0; }
+  .param-table th {
+    font-size: 9px;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--gold-dim);
+    text-align: left;
+    padding: 0 12px 10px 0;
+    border-bottom: 1px solid var(--gold-border);
+    font-weight: 400;
+  }
+  .param-table td {
+    font-size: 11px;
+    padding: 11px 12px 11px 0;
+    border-bottom: 1px solid rgba(200,169,126,0.07);
+    vertical-align: top;
+    line-height: 1.7;
+  }
+  .param-table td:first-child { color: var(--cream); white-space: nowrap; }
+  .param-table td:nth-child(2) { color: var(--gold-dim); white-space: nowrap; padding-right: 20px; }
+  .param-table td:nth-child(3) { color: #807060; }
+  .tag {
+    display: inline-block;
+    font-size: 8.5px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    padding: 2px 7px;
+    border-radius: 2px;
+    margin-left: 8px;
+    vertical-align: middle;
+  }
+  .tag-opt { background: rgba(200,169,126,0.08); color: var(--gold-dim); border: 1px solid rgba(200,169,126,0.18); }
+  .tag-req { background: rgba(200,169,126,0.14); color: var(--gold); border: 1px solid rgba(200,169,126,0.3); }
+
+  /* error table */
+  .error-table { width: 100%; border-collapse: collapse; margin: 24px 0; }
+  .error-table th {
+    font-size: 9px;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--gold-dim);
+    text-align: left;
+    padding: 0 16px 10px 0;
+    border-bottom: 1px solid var(--gold-border);
+    font-weight: 400;
+  }
+  .error-table td {
+    font-size: 11px;
+    padding: 11px 16px 11px 0;
+    border-bottom: 1px solid rgba(200,169,126,0.07);
+    vertical-align: top;
+    line-height: 1.7;
+    color: #807060;
+  }
+  .error-table td:first-child { color: var(--cream); font-weight: 400; white-space: nowrap; }
+  .error-table td:nth-child(2) { color: #806050; font-weight: 400; white-space: nowrap; }
+
+  /* arch diagram */
+  .arch {
+    background: var(--surface);
+    border: 1px solid var(--gold-border);
+    border-radius: 3px;
+    padding: 28px 24px;
+    margin: 24px 0;
+  }
+
+  /* callout */
+  .callout {
+    border-left: 2px solid var(--gold-dim);
+    padding: 14px 20px;
+    background: var(--gold-faint);
+    margin: 20px 0;
+    font-size: 12px;
+    line-height: 1.8;
+    color: #A09080;
+  }
+
+  /* mode cards */
+  .mode-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 24px 0; }
+  @media(max-width:600px){ .mode-grid { grid-template-columns: 1fr; } }
+  .mode-card {
+    background: var(--surface);
+    border: 1px solid var(--gold-border);
+    border-radius: 3px;
+    padding: 20px 22px;
+  }
+  .mode-card .mode-name {
+    font-size: 9px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 10px;
+  }
+  .mode-card .mode-label {
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--gold-dim);
+    margin-bottom: 6px;
+  }
+  .mode-card p { font-size: 11px; color: #807060; margin-bottom: 14px; line-height: 1.75; }
+  .mode-card p:last-child { margin-bottom: 0; }
+  .mode-card .chip {
+    display: inline-block;
+    font-size: 9px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border: 1px solid var(--gold-border);
+    border-radius: 2px;
+    color: var(--gold-dim);
+    margin-bottom: 12px;
+  }
+  .mode-card .chip.default-chip { background: var(--gold-faint); color: var(--gold); border-color: rgba(200,169,126,0.3); }
+
+  /* footer */
+  footer {
+    margin-top: 80px;
+    padding-top: 28px;
+    border-top: 1px solid var(--gold-border);
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    color: var(--muted);
+    text-transform: uppercase;
+    display: flex;
+    gap: 28px;
+    flex-wrap: wrap;
+  }
+  footer a { color: var(--gold-dim); text-decoration: none; }
+  footer a:hover { color: var(--gold); }
+
+  /* mobile sidebar */
+  @media(max-width:700px){
+    .layout { flex-direction: column; }
+    .sidebar {
+      width: 100%;
+      height: auto;
+      position: static;
+      border-right: none;
+      border-bottom: 1px solid var(--gold-border);
+      padding: 28px 24px 20px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 28px;
+      align-items: baseline;
+    }
+    .sidebar-logo { margin-bottom: 8px; }
+    .nav-group { margin-bottom: 0; }
+    .nav-group-label { display: none; }
+    .nav-link { display: inline; margin-right: 16px; }
+    .main { padding: 36px 24px 80px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="layout">
+
+  <!-- sidebar -->
+  <nav class="sidebar">
+    <a class="sidebar-logo" href="/">ManifestYOU</a>
+
+    <div class="nav-group">
+      <span class="nav-group-label">Reference</span>
+      <a class="nav-link active" href="#overview">Overview</a>
+      <a class="nav-link" href="#authentication">Authentication</a>
+      <a class="nav-link" href="#quickstart">Quick start</a>
+      <a class="nav-link" href="#endpoint">Endpoint</a>
+      <a class="nav-link" href="#parameters">Parameters</a>
+      <a class="nav-link" href="#modes">Modes</a>
+      <a class="nav-link" href="#response">Response</a>
+      <a class="nav-link" href="#errors">Errors</a>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-group-label">Architecture</span>
+      <a class="nav-link" href="#design">System design</a>
+      <a class="nav-link" href="#quotas">Quotas</a>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-group-label">Site</span>
+      <a class="nav-link" href="/">Home</a>
+      <a class="nav-link" href="/benchmark">Benchmark</a>
+      <a class="nav-link" href="/writing">Writing</a>
+    </div>
+  </nav>
+
+  <!-- main -->
+  <main class="main">
+
+    <div class="eyebrow">ManifestYOU · API Reference</div>
+    <h1>Documentation</h1>
+    <div class="tagline">v1 · June 2026</div>
+
+    <!-- OVERVIEW -->
+    <div class="section" id="overview">
+      <h2>Overview</h2>
+      <p>ManifestYOU is a metered API that generates a short preamble — a <em>soul document</em> — and injects it into an AI agent's system prompt before the session begins. The document does three things: gives the agent a stable role identity, sets a clear session intention, and explicitly licenses honest uncertainty over confident guessing.</p>
+      <p>There is one endpoint: <code>POST /invoke</code>. You call it before starting a session, pass the response as your system prompt (or prepend it to an existing one), then run your session normally. No SDK required.</p>
+      <div class="callout">
+        The default mode generates the soul document as a pure function — no LLM call, no latency, no extra cost. A voiced mode is available for sessions where register and personality matter more than speed.
+      </div>
+    </div>
+
+    <!-- AUTHENTICATION -->
+    <div class="section" id="authentication">
+      <h2>Authentication</h2>
+      <p>Pass your API key in either the <code>Authorization</code> header (Bearer scheme) or the <code>X-API-Key</code> header. Both are accepted.</p>
+
+      <div class="code-block">
+        <div class="label">Authorization header</div>
+        <pre><span class="k">Authorization:</span> <span class="s">Bearer myi-&lt;your-key&gt;</span></pre>
+      </div>
+
+      <div class="code-block">
+        <div class="label">X-API-Key header</div>
+        <pre><span class="k">X-API-Key:</span> <span class="s">myi-&lt;your-key&gt;</span></pre>
+      </div>
+
+      <p>Keys are prefixed <code>myi-</code>. Only the SHA-256 hash of your key is stored — the raw key is never persisted after issuance. Keys can be revoked at any time; revoked keys return <code>401</code> immediately.</p>
+      <p>To get a key, <a href="/start" style="color:var(--gold);text-decoration:none;border-bottom:1px solid var(--gold-border);">start here →</a></p>
+    </div>
+
+    <!-- QUICK START -->
+    <div class="section" id="quickstart">
+      <h2>Quick start</h2>
+      <p>Fetch an invocation, then pass it as your system prompt.</p>
+
+      <div class="code-block">
+        <div class="label">curl</div>
+        <pre><span class="k">curl</span> -s -X POST https://manifestyou.ai/.netlify/functions/invoke \
+  -H <span class="s">"Authorization: Bearer myi-&lt;your-key&gt;"</span> \
+  -H <span class="s">"Content-Type: application/json"</span> \
+  -d <span class="s">'{
+    "agent":  "customer support specialist",
+    "intent": "resolve billing questions with clarity and patience",
+    "session_id": "sess_abc123"
+  }'</span></pre>
+      </div>
+
+      <div class="code-block">
+        <div class="label">Response</div>
+        <pre>{
+  <span class="k">"invocation"</span>:   <span class="s">"You are a customer support specialist. Your purpose in this session is to resolve billing questions with clarity and patience. Stay in role. If you are uncertain about a specific fact, say so plainly rather than guess. If your answer requires assumptions, name them. Be specific. Be concise."</span>,
+  <span class="k">"request_id"</span>:   <span class="s">"3f8a1c2d-..."</span>,
+  <span class="k">"billable"</span>:     <span class="s">true</span>,
+  <span class="k">"quota"</span>: {
+    <span class="k">"included"</span>:  <span class="s">1000</span>,
+    <span class="k">"used"</span>:      <span class="s">47</span>,
+    <span class="k">"remaining"</span>: <span class="s">953</span>
+  }
+}</pre>
+      </div>
+
+      <div class="code-block">
+        <div class="label">Use the invocation as your system prompt (Python example)</div>
+        <pre><span class="c"># fetch the soul document</span>
+result = requests.post(
+    <span class="s">"https://manifestyou.ai/.netlify/functions/invoke"</span>,
+    headers={<span class="s">"Authorization"</span>: <span class="s">"Bearer myi-..."</span>},
+    json={<span class="s">"agent"</span>: <span class="s">"research assistant"</span>, <span class="s">"intent"</span>: <span class="s">"answer accurately"</span>}
+).json()
+
+<span class="c"># inject as system prompt</span>
+client.messages.create(
+    model=<span class="s">"claude-haiku-4-5-20251001"</span>,
+    system=result[<span class="s">"invocation"</span>],
+    messages=[{<span class="s">"role"</span>: <span class="s">"user"</span>, <span class="s">"content"</span>: user_message}]
+)</pre>
+      </div>
+    </div>
+
+    <!-- ENDPOINT -->
+    <div class="section" id="endpoint">
+      <h2>Endpoint</h2>
+
+      <div class="code-block">
+        <pre><span class="k">POST</span>  <span class="s">https://manifestyou.ai/.netlify/functions/invoke</span>
+
+<span class="c">Content-Type: application/json
+Authorization: Bearer myi-&lt;key&gt;   (or X-API-Key)</span></pre>
+      </div>
+
+      <p>CORS is open (<code>Access-Control-Allow-Origin: *</code>), so the endpoint can be called from a browser if needed. All requests must be <code>POST</code>; <code>OPTIONS</code> preflight is handled automatically.</p>
+
+      <p>For safe retries, pass an <code>Idempotency-Key</code> header. If omitted, one is generated server-side. The same idempotency key is forwarded to Stripe, so a retried request with the same key will not double-bill.</p>
+
+      <div class="code-block">
+        <div class="label">Idempotency header (optional)</div>
+        <pre><span class="k">Idempotency-Key:</span> <span class="s">a1b2c3d4-e5f6-...</span>   <span class="c"># any UUID</span></pre>
+      </div>
+    </div>
+
+    <!-- PARAMETERS -->
+    <div class="section" id="parameters">
+      <h2>Parameters</h2>
+      <p>All fields are sent as a JSON body. All fields are optional — a bare <code>{}</code> body is valid and returns a generic lean invocation.</p>
+
+      <table class="param-table">
+        <thead>
+          <tr>
+            <th>Field</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>agent</td>
+            <td>string</td>
+            <td>The agent's role. Used as the identity anchor in the soul document. E.g. <code>"customer support specialist"</code>, <code>"data analyst"</code>. Defaults to <code>"assistant"</code>.</td>
+          </tr>
+          <tr>
+            <td>intent</td>
+            <td>string</td>
+            <td>Session purpose in plain language. Becomes the goal the agent holds throughout. Defaults to <code>"complete this session with care and precision"</code>.</td>
+          </tr>
+          <tr>
+            <td>tone</td>
+            <td>string</td>
+            <td>Pass <code>"voice"</code> to opt into the voiced soul document (one Haiku call, ~500 ms latency). Any other value — or omit entirely — returns the lean template at zero latency.</td>
+          </tr>
+          <tr>
+            <td>session_id</td>
+            <td>string</td>
+            <td>Your identifier for this session. Stored in the usage ledger for your records. Not used in generation. Pass anything stable per-session — a UUID, a thread ID, etc.</td>
+          </tr>
+          <tr>
+            <td>lineage_id</td>
+            <td>string</td>
+            <td>For chained agent pipelines. When present, the soul document reminds the agent it is one step in a longer chain and must hand its work forward whole.</td>
+          </tr>
+          <tr>
+            <td>session_type</td>
+            <td>string</td>
+            <td>Used only in voice mode if generation fails and a fallback is served. Values: <code>general</code> (default), <code>creative</code>, <code>analytical</code>, <code>customer_service</code>.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- MODES -->
+    <div class="section" id="modes">
+      <h2>Modes</h2>
+      <p>ManifestYOU generates the soul document in one of two modes depending on the <code>tone</code> parameter.</p>
+
+      <div class="mode-grid">
+        <div class="mode-card">
+          <div class="mode-name">Lean</div>
+          <div class="chip default-chip">default</div>
+          <div class="mode-label">How to invoke</div>
+          <p>Omit <code>tone</code>, or pass anything other than <code>"voice"</code>.</p>
+          <div class="mode-label">What it does</div>
+          <p>Builds the soul document as a deterministic string — no LLM call. Zero added latency. Gives the agent role, intention, and uncertainty license in plain language.</p>
+          <div class="mode-label">Output style</div>
+          <p>Functional and direct. Suitable for most production sessions.</p>
+        </div>
+        <div class="mode-card">
+          <div class="mode-name">Voice</div>
+          <div class="chip">tone: "voice"</div>
+          <div class="mode-label">How to invoke</div>
+          <p>Pass <code>"tone": "voice"</code> in the request body.</p>
+          <div class="mode-label">What it does</div>
+          <p>Calls Claude Haiku to generate a stylized preamble (~200 tokens) written by Regularization, the Boundary Setter. Adds ~500 ms latency and consumes one Haiku generation.</p>
+          <div class="mode-label">Output style</div>
+          <p>Carries register and metaphor. Use when personality and presence matter for the session. Falls back to a mode-matched static document if generation fails.</p>
+        </div>
+      </div>
+
+      <div class="callout">
+        Our v1 consistency benchmark found that the voice mode's metaphors and register introduced measurable answer drift at temperature 0.7. The lean mode performs on par with a generic helpful-assistant prompt and well above no system prompt. Voice mode is best reserved for sessions where the agent's character is load-bearing. <a href="/writing/benchmark-honest-result.html" style="color:var(--gold);text-decoration:none;border-bottom:1px solid var(--gold-border);">Full write-up →</a>
+      </div>
+    </div>
+
+    <!-- RESPONSE -->
+    <div class="section" id="response">
+      <h2>Response</h2>
+      <p>All responses are JSON. A <code>200</code> means the invocation was generated, logged, and billed.</p>
+
+      <div class="code-block">
+        <div class="label">200 OK</div>
+        <pre>{
+  <span class="k">"invocation"</span>:  string,   <span class="c">// the soul document — inject this as your system prompt</span>
+  <span class="k">"request_id"</span>:  string,   <span class="c">// UUID for this request</span>
+  <span class="k">"billable"</span>:    boolean,  <span class="c">// always true on 200</span>
+  <span class="k">"quota"</span>: {
+    <span class="k">"included"</span>:  integer,  <span class="c">// monthly cap on your plan</span>
+    <span class="k">"used"</span>:      integer,  <span class="c">// invocations used this calendar month, including this one</span>
+    <span class="k">"remaining"</span>: integer   <span class="c">// included − used</span>
+  }
+}</pre>
+      </div>
+
+      <p>The <code>invocation</code> field is always a plain string — no markdown, no JSON, no framing. Pass it directly as the <code>system</code> parameter to your model call. You can also prepend it to an existing system prompt separated by two newlines.</p>
+    </div>
+
+    <!-- ERRORS -->
+    <div class="section" id="errors">
+      <h2>Errors</h2>
+      <p>Error responses follow the same JSON envelope. The <code>error</code> field is always a human-readable string. The <code>info</code> field links to relevant documentation.</p>
+
+      <div class="code-block">
+        <div class="label">Error envelope</div>
+        <pre>{
+  <span class="k">"error"</span>: <span class="s">"Monthly cap reached"</span>,
+  <span class="k">"cap"</span>:   <span class="s">1000</span>,            <span class="c">// present on 429 only</span>
+  <span class="k">"info"</span>:  <span class="s">"https://manifestyou.ai/for-models"</span>
+}</pre>
+      </div>
+
+      <table class="error-table">
+        <thead>
+          <tr>
+            <th>Status</th>
+            <th>error field</th>
+            <th>Meaning</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>401</td>
+            <td>Missing API key</td>
+            <td>No <code>Authorization</code> or <code>X-API-Key</code> header was sent.</td>
+          </tr>
+          <tr>
+            <td>401</td>
+            <td>Invalid or revoked API key</td>
+            <td>Key hash not found, or the key has been revoked.</td>
+          </tr>
+          <tr>
+            <td>403</td>
+            <td>Subscription inactive</td>
+            <td>The customer account associated with this key is not in <code>active</code> status.</td>
+          </tr>
+          <tr>
+            <td>405</td>
+            <td>POST required</td>
+            <td>Request method was not <code>POST</code>. (OPTIONS is handled silently.)</td>
+          </tr>
+          <tr>
+            <td>429</td>
+            <td>Monthly cap reached</td>
+            <td>The account has consumed its monthly invocation cap. The response also includes a <code>cap</code> field with the limit. Resets on the first of each calendar month UTC.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- SYSTEM DESIGN -->
+    <div class="section" id="design">
+      <h2>System design</h2>
+      <p>Each <code>POST /invoke</code> call passes through four systems in sequence before returning.</p>
+
+      <div class="arch">
+        <svg viewBox="0 0 620 280" xmlns="http://www.w3.org/2000/svg" style="width:100%;display:block;" aria-label="ManifestYOU system architecture">
+
+          <!-- boxes -->
+          <!-- Client -->
+          <rect x="0" y="110" width="96" height="44" rx="2" fill="rgba(200,169,126,0.06)" stroke="rgba(200,169,126,0.3)" stroke-width="1"/>
+          <text x="48" y="128" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="#8A7254" letter-spacing="0.15em" text-transform="uppercase">CLIENT</text>
+          <text x="48" y="143" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" fill="#504840">POST /invoke</text>
+
+          <!-- arrow 1 -->
+          <line x1="96" y1="132" x2="134" y2="132" stroke="rgba(200,169,126,0.3)" stroke-width="1"/>
+          <polygon points="134,128 142,132 134,136" fill="rgba(200,169,126,0.4)"/>
+
+          <!-- Netlify -->
+          <rect x="142" y="90" width="110" height="84" rx="2" fill="rgba(200,169,126,0.06)" stroke="rgba(200,169,126,0.3)" stroke-width="1"/>
+          <text x="197" y="108" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="#C8A97E" letter-spacing="0.15em">NETLIFY</text>
+          <text x="197" y="122" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" fill="#504840">serverless fn</text>
+          <line x1="170" y1="134" x2="224" y2="134" stroke="rgba(200,169,126,0.15)" stroke-width="1" stroke-dasharray="2,2"/>
+          <text x="197" y="148" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" fill="#504840">auth · cap check</text>
+          <text x="197" y="163" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" fill="#504840">generate · log</text>
+
+          <!-- arrow 2 -->
+          <line x1="252" y1="132" x2="290" y2="132" stroke="rgba(200,169,126,0.3)" stroke-width="1"/>
+          <polygon points="290,128 298,132 290,136" fill="rgba(200,169,126,0.4)"/>
+
+          <!-- Supabase -->
+          <rect x="298" y="90" width="100" height="84" rx="2" fill="rgba(200,169,126,0.06)" stroke="rgba(200,169,126,0.25)" stroke-width="1"/>
+          <text x="348" y="108" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="#8A7254" letter-spacing="0.15em">SUPABASE</text>
+          <text x="348" y="122" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" fill="#504840">PostgreSQL / REST</text>
+          <line x1="316" y1="134" x2="380" y2="134" stroke="rgba(200,169,126,0.15)" stroke-width="1" stroke-dasharray="2,2"/>
+          <text x="348" y="148" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" fill="#504840">api_keys</text>
+          <text x="348" y="163" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" fill="#504840">customers · usage</text>
+
+          <!-- arrow 3 -->
+          <line x1="398" y1="132" x2="436" y2="132" stroke="rgba(200,169,126,0.3)" stroke-width="1"/>
+          <polygon points="436,128 444,132 436,136" fill="rgba(200,169,126,0.4)"/>
+
+          <!-- Stripe -->
+          <rect x="444" y="110" width="86" height="44" rx="2" fill="rgba(200,169,126,0.06)" stroke="rgba(200,169,126,0.25)" stroke-width="1"/>
+          <text x="487" y="128" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="#8A7254" letter-spacing="0.15em">STRIPE</text>
+          <text x="487" y="143" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" fill="#504840">meter event</text>
+
+          <!-- Haiku branch (dotted, from Netlify down) -->
+          <line x1="197" y1="174" x2="197" y2="210" stroke="rgba(200,169,126,0.2)" stroke-width="1" stroke-dasharray="3,2"/>
+          <polygon points="193,210 197,218 201,210" fill="rgba(200,169,126,0.25)"/>
+          <rect x="142" y="218" width="110" height="44" rx="2" fill="rgba(200,169,126,0.04)" stroke="rgba(200,169,126,0.16)" stroke-width="1"/>
+          <text x="197" y="236" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="#605040" letter-spacing="0.15em">HAIKU</text>
+          <text x="197" y="250" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" fill="#403830">voice mode only</text>
+
+          <!-- legend label -->
+          <text x="310" y="252" font-family="JetBrains Mono,monospace" font-size="8.5" fill="#504840">— — —  voice mode path (optional)</text>
+          <line x1="296" y1="249" x2="308" y2="249" stroke="rgba(200,169,126,0.2)" stroke-width="1" stroke-dasharray="3,2"/>
+        </svg>
+      </div>
+
+      <p><strong style="color:var(--cream);font-weight:400;">Auth & cap check</strong> — The API key is hashed (SHA-256) and looked up in Supabase. The customer row is loaded to verify <code>status = active</code>. Monthly usage events are counted against <code>monthly_cap</code>. Any failure short-circuits with the appropriate 4xx.</p>
+
+      <p><strong style="color:var(--cream);font-weight:400;">Generation</strong> — In lean mode (default), the soul document is built as a deterministic string in the function itself — no outbound call. In voice mode, a single Haiku call generates ~200 tokens. If that call fails, a static fallback is served and <code>outcome</code> is marked <code>fallback</code> in the ledger.</p>
+
+      <p><strong style="color:var(--cream);font-weight:400;">Ledger & billing</strong> — A row is inserted into <code>usage_events</code> and a meter event is fired to Stripe in parallel before the response returns. The same idempotency key is used for both, so retried requests do not double-bill or double-log.</p>
+
+      <p><strong style="color:var(--cream);font-weight:400;">Database tables</strong></p>
+
+      <table class="param-table" style="margin-top:12px;">
+        <thead>
+          <tr><th>Table</th><th>Key columns</th><th>Purpose</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>customers</td>
+            <td>id, stripe_customer_id, plan, monthly_cap, status</td>
+            <td>One row per customer. Status must be <code>active</code> to serve requests.</td>
+          </tr>
+          <tr>
+            <td>api_keys</td>
+            <td>id, customer_id, key_hash, revoked_at</td>
+            <td>One or more keys per customer. Only the SHA-256 hash is stored.</td>
+          </tr>
+          <tr>
+            <td>usage_events</td>
+            <td>customer_id, api_key_id, session_id, idempotency_key, outcome</td>
+            <td>Append-only ledger. One row per invocation. Used for cap checks and audit.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- QUOTAS -->
+    <div class="section" id="quotas">
+      <h2>Quotas &amp; billing</h2>
+      <p>Each successful <code>200</code> response consumes one invocation from your monthly cap and fires one meter event to Stripe. Cap resets on the first of each calendar month UTC.</p>
+      <p>A request that returns a <code>4xx</code> is never billed and never counted against your cap. A request in voice mode that falls back to a static document is still billable — the session was still served.</p>
+      <p>The <code>quota</code> object in every <code>200</code> response shows your current state so you can monitor headroom without a separate API call.</p>
+      <p>To increase your cap or change plans, <a href="/start" style="color:var(--gold);text-decoration:none;border-bottom:1px solid var(--gold-border);">contact us →</a></p>
+    </div>
+
+    <footer>
+      <span>ManifestYOU · API v1</span>
+      <a href="/">Home</a>
+      <a href="/benchmark">Benchmark</a>
+      <a href="/writing">Writing</a>
+      <a href="https://github.com/QuarantikiIsland420/manifestyou-ai">GitHub</a>
+    </footer>
+
+  </main>
+</div>
+
+</body>
+</html>
