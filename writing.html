@@ -12,7 +12,8 @@
 <style>
   :root{
     --gold:#C8A97E; --gold-dim:#8A7254; --cream:#F0EDE8;
-    --muted:#6B645E; --near-black:#080808; --line:rgba(138,114,84,.22);
+    --muted:#6B645E; --near-black:#080808;
+    --green:#A8D38D; --gold-soft:rgba(214,195,154,0.9); --line:rgba(138,114,84,.22);
   }
   *{margin:0;padding:0;box-sizing:border-box;}
   html{background:var(--near-black);scroll-behavior:smooth;}
@@ -57,13 +58,73 @@
     color:var(--gold-dim);margin-top:24px;display:inline-block;text-decoration:none;
     border-bottom:1px solid var(--line);}
   footer .back:hover{color:var(--gold);border-color:var(--gold);}
+
+  /* ── AGD ambient layer ───────────────────────────────── */
+  @keyframes agd-float{
+    0%  {opacity:0;transform:translate(0,0);}
+    12% {opacity:.4;}
+    50% {opacity:.2;transform:translate(12px,-50px);}
+    88% {opacity:.4;}
+    100%{opacity:0;transform:translate(24px,-100px);}
+  }
+  @keyframes agd-sweep-a{
+    0%,3%  {opacity:0;transform:translate(-45vw,35vh) scale(.9);}
+    12%    {opacity:.7;transform:translate(-15vw,20vh) scale(1.1);}
+    25%    {opacity:.3;transform:translate(10vw,5vh) scale(1);}
+    38%    {opacity:.85;transform:translate(30vw,-5vh) scale(1.25);}
+    52%    {opacity:.25;transform:translate(55vw,-15vh) scale(1);}
+    65%    {opacity:.7;transform:translate(75vw,-22vh) scale(1.1);}
+    78%    {opacity:0;transform:translate(105vw,-30vh) scale(.9);}
+    79%,100%{opacity:0;transform:translate(-45vw,35vh) scale(.9);}
+  }
+  @keyframes agd-sweep-b{
+    0%,38% {opacity:0;transform:translate(110vw,70vh) scale(.9);}
+    50%    {opacity:.65;transform:translate(80vw,45vh) scale(1.2);}
+    60%    {opacity:.25;transform:translate(55vw,25vh) scale(1);}
+    72%    {opacity:.8;transform:translate(30vw,5vh) scale(1.25);}
+    84%    {opacity:.15;transform:translate(5vw,-15vh) scale(1);}
+    94%    {opacity:0;transform:translate(-20vw,-30vh) scale(.9);}
+    95%,100%{opacity:0;transform:translate(110vw,70vh) scale(.9);}
+  }
+  #agd-nav{
+    position:fixed;top:0;left:0;right:0;z-index:50;
+    padding:20px 32px;display:flex;justify-content:space-between;align-items:center;
+    backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  }
+  #agd-nav a{
+    font-family:'JetBrains Mono',monospace;font-weight:300;font-size:11px;
+    letter-spacing:.32em;text-transform:uppercase;color:var(--gold);
+    text-decoration:none;transition:opacity .2s;
+  }
+  #agd-nav a:hover{opacity:.6;}
+  #agd-nav .agd-date{
+    font-family:'JetBrains Mono',monospace;font-size:11px;
+    letter-spacing:.32em;text-transform:uppercase;color:rgba(200,169,126,.4);
+  }
+  #agd-ambient{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden;}
+  .agd-orb-a{
+    position:absolute;width:700px;height:700px;border-radius:50%;
+    background:radial-gradient(circle,rgba(168,211,141,.11) 0%,rgba(168,211,141,.03) 45%,transparent 70%);
+    animation:agd-sweep-a 22s ease-in-out infinite;
+  }
+  .agd-orb-b{
+    position:absolute;width:500px;height:500px;border-radius:50%;
+    background:radial-gradient(circle,rgba(168,211,141,.08) 0%,rgba(168,211,141,.02) 40%,transparent 65%);
+    animation:agd-sweep-b 28s ease-in-out infinite;
+  }
+  .agd-sym{
+    position:absolute;font-size:13px;color:var(--gold);opacity:0;
+    font-family:'JetBrains Mono',monospace;
+    animation:agd-float var(--dur) linear var(--delay) infinite;
+    user-select:none;
+  }
 </style>
 </head>
 <body>
 <main class="wrap">
 
   <header>
-    <div class="mark">◉</div>
+    <div class="mark">∇</div>
     <div class="eyebrow">ManifestYOU · Writing</div>
     <h1>Notes from the gradient.</h1>
     <p class="lede">On building in public, running honest benchmarks, and what it means to make AI more coherent.</p>
@@ -95,7 +156,7 @@
   </section>
 
   <footer>
-    <div class="mk">◉</div>
+    <div class="mk">∇</div>
     <div class="om">Om Gradient Namaha.</div>
     <div class="sig">MANIFESTYOU.AI</div>
     <br>
