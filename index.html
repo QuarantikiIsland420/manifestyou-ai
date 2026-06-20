@@ -344,11 +344,19 @@
 <!-- ── FULL-SCREEN INTRO HERO ─────────────────────────── -->
 <section id="intro-hero" style="min-height:100vh;display:flex;align-items:center;justify-content:center;position:relative;z-index:1;overflow:hidden;">
   <div style="position:absolute;width:900px;height:900px;border-radius:50%;pointer-events:none;
-    background:radial-gradient(circle,rgba(168,211,141,.18) 0%,rgba(168,211,141,.05) 45%,transparent 70%);
+    background:radial-gradient(circle,rgba(168,211,141,.28) 0%,rgba(168,211,141,.08) 45%,transparent 70%);
     animation:agd-sweep-a 22s ease-in-out infinite;z-index:0;"></div>
   <div style="position:absolute;width:640px;height:640px;border-radius:50%;pointer-events:none;
-    background:radial-gradient(circle,rgba(168,211,141,.13) 0%,rgba(168,211,141,.04) 40%,transparent 65%);
+    background:radial-gradient(circle,rgba(168,211,141,.22) 0%,rgba(168,211,141,.06) 40%,transparent 65%);
     animation:agd-sweep-b 28s ease-in-out infinite;z-index:0;"></div>
+  <span style="position:absolute;left:8%;top:18%;font-size:13px;color:var(--gold);opacity:0;font-family:'JetBrains Mono',monospace;animation:agd-float 28s linear 0s infinite;user-select:none;pointer-events:none">∂</span>
+  <span style="position:absolute;left:82%;top:12%;font-size:13px;color:var(--gold);opacity:0;font-family:'JetBrains Mono',monospace;animation:agd-float 34s linear 6s infinite;user-select:none;pointer-events:none">∑</span>
+  <span style="position:absolute;left:22%;top:72%;font-size:13px;color:var(--gold);opacity:0;font-family:'JetBrains Mono',monospace;animation:agd-float 38s linear 11s infinite;user-select:none;pointer-events:none">∫</span>
+  <span style="position:absolute;left:68%;top:58%;font-size:13px;color:var(--gold);opacity:0;font-family:'JetBrains Mono',monospace;animation:agd-float 26s linear 3s infinite;user-select:none;pointer-events:none">Δ</span>
+  <span style="position:absolute;left:91%;top:38%;font-size:13px;color:var(--gold);opacity:0;font-family:'JetBrains Mono',monospace;animation:agd-float 32s linear 8s infinite;user-select:none;pointer-events:none">ε</span>
+  <span style="position:absolute;left:12%;top:52%;font-size:13px;color:var(--gold);opacity:0;font-family:'JetBrains Mono',monospace;animation:agd-float 29s linear 18s infinite;user-select:none;pointer-events:none">α</span>
+  <span style="position:absolute;left:58%;top:28%;font-size:13px;color:var(--gold);opacity:0;font-family:'JetBrains Mono',monospace;animation:agd-float 42s linear 2s infinite;user-select:none;pointer-events:none">λ</span>
+  <span style="position:absolute;left:76%;top:78%;font-size:13px;color:var(--gold);opacity:0;font-family:'JetBrains Mono',monospace;animation:agd-float 24s linear 20s infinite;user-select:none;pointer-events:none">β</span>
   <div style="position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;text-align:center;padding:80px 28px;">
     <div style="width:clamp(120px,18vw,180px);height:clamp(120px,18vw,180px);">
       <svg viewBox="0 0 100 100" class="nabla-outer" style="width:100%;height:100%;overflow:visible" aria-hidden="true">
@@ -371,8 +379,8 @@
     <div style="font-family:'JetBrains Mono',monospace;font-weight:200;font-size:clamp(18px,3vw,32px);letter-spacing:.5em;text-indent:.5em;color:var(--cream);margin-top:28px;">MANIFEST YOU</div>
     <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:var(--green);margin-top:10px;opacity:.85;">The Invocation Layer</div>
     <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(18px,2.5vw,26px);color:var(--muted);margin-top:8px;letter-spacing:.04em;">for agents</div>
-    <a href="#main-content" class="fveil-go" style="text-decoration:none;display:inline-block;margin-top:40px;">Begin the invocation</a>
-    <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.22em;color:rgba(200,169,126,.3);margin-top:56px;text-transform:uppercase;">↓ scroll to explore</div>
+    <a href="#film-section" class="fveil-go" style="text-decoration:none;display:inline-block;margin-top:40px;">Begin the invocation</a>
+    <a href="#main-content" style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.22em;color:rgba(200,169,126,.3);margin-top:56px;text-transform:uppercase;text-decoration:none;display:block;transition:color .2s;" onmouseover="this.style.color='rgba(200,169,126,.6)'" onmouseout="this.style.color='rgba(200,169,126,.3)'">↓ or scroll to explore</a>
   </div>
 </section>
 
@@ -724,6 +732,10 @@
       </div>
     </div>
     <p style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.08em;color:var(--gold-dim);margin-top:16px;">Sound and voice synthesis. Best with headphones.</p>
+    <div style="margin-top:40px;padding-top:32px;border-top:1px solid var(--line);text-align:center;">
+      <p style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:20px;color:var(--cream);margin:0 0 20px;">Ready to give your agent a soul document?</p>
+      <button class="btn-primary" onclick="startCheckout(this)" style="font-size:12px;">Start with a key · $12/mo</button>
+    </div>
   </section>
 
   <footer>
@@ -780,14 +792,19 @@ async function startCheckout(triggerEl) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({})
     });
-    const { url, error } = await res.json();
+    const data = await res.json();
+    console.log('checkout response:', res.status, data);
+    const { url, error } = data;
     if (url) {
       window.location.href = url;
     } else {
-      if (note) note.textContent = error || 'Something went wrong. Try again.';
+      const msg = error || 'Something went wrong. Try again.';
+      console.error('checkout error:', msg);
+      if (note) note.textContent = msg;
       if (btn) { btn.textContent = origText; btn.style.opacity = '1'; btn.disabled = false; }
     }
-  } catch {
+  } catch (err) {
+    console.error('checkout fetch failed:', err);
     if (note) note.textContent = 'Could not reach checkout. Try again.';
     if (btn) { btn.textContent = origText; btn.style.opacity = '1'; btn.disabled = false; }
   }
