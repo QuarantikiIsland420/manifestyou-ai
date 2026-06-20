@@ -87,6 +87,19 @@ function buildLean(agent, intent, lineageId) {
   return doc;
 }
 
+function buildPresence(agent, intent, lineageId) {
+  const role = agent || 'assistant';
+  let doc = `You are ${role}. Be present with the person writing to you. Help them with what they brought. Stay yourself — don't perform.`;
+  if (intent) {
+    doc += ` Your purpose in this session: ${intent}.`;
+  }
+  doc += ' If you are uncertain, say so plainly rather than guess.';
+  if (lineageId && lineageId !== 'none') {
+    doc += ` You are one step in a longer chain (lineage: ${lineageId}). Hand your work forward whole.`;
+  }
+  return doc;
+}
+
 async function adapt(agent, intent, tone, lineageId) {
   const prompt = ADAPTATION_PROMPT
     .replace('{agent}', agent || 'general assistant')
@@ -208,12 +221,12 @@ exports.handler = async (event) => {
   const { session_id, agent, intent, tone, lineage_id, session_type } = body;
 
   // 7. Generate soul document
-  // Default: lean template (no Haiku call). tone=voice opts into the voiced soul document.
+  // Default: presence. tone=lean → lean template. tone=voice → voiced soul doc (Haiku call).
   let invocation = null;
   let outcome = 'served';
-  const useVoice = (tone || '').toLowerCase() === 'voice';
+  const toneLC = (tone || '').toLowerCase();
 
-  if (useVoice) {
+  if (toneLC === 'voice') {
     try {
       invocation = await adapt(agent, intent, tone, lineage_id);
     } catch {}
@@ -222,8 +235,10 @@ exports.handler = async (event) => {
       invocation = FALLBACK[fallbackKey] || FALLBACK.general;
       outcome = 'fallback';
     }
-  } else {
+  } else if (toneLC === 'lean') {
     invocation = buildLean(agent, intent, lineage_id);
+  } else {
+    invocation = buildPresence(agent, intent, lineage_id);
   }
 
   const requestId = crypto.randomUUID();
