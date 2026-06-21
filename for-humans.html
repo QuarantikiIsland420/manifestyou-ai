@@ -194,6 +194,14 @@
     .reg-widget{bottom:1rem;right:1rem;}
     .reg-widget__panel{max-height:min(520px,calc(100vh - 2rem));}
   }
+  @keyframes nabla-glow{0%,60%,100%{filter:drop-shadow(0 0 0px transparent);opacity:.88;}80%{filter:drop-shadow(0 0 22px rgba(214,195,154,.45));opacity:1;}}
+  @keyframes trace-spark{0%{stroke-dashoffset:278;}100%{stroke-dashoffset:0;}}
+  @keyframes trace-spark-rev{0%{stroke-dashoffset:0;}100%{stroke-dashoffset:278;}}
+  @keyframes nabla-shim-move{0%{transform:translateX(-120px);}100%{transform:translateX(220px);}}
+  .nabla-outer{animation:nabla-glow 9s ease-in-out infinite;}
+  .nabla-spark{stroke-dasharray:5 273;animation:trace-spark 7s linear infinite;}
+  .nabla-spark-rev{stroke-dasharray:5 273;animation:trace-spark-rev 7s linear infinite;}
+  .nabla-shim{animation:nabla-shim-move 4s ease-in-out infinite;}
 </style>
 </head>
 <body>
@@ -227,7 +235,24 @@
 
   <!-- HERO -->
   <header>
-    <div class="mark">∇</div>
+    <div style="width:60px;height:60px;margin-bottom:6px;">
+      <svg viewBox="0 0 100 100" class="nabla-outer" style="width:100%;height:100%;overflow:visible" aria-hidden="true">
+        <defs>
+          <clipPath id="fh-nabla-clip"><polygon points="50,92 6,8 94,8"/></clipPath>
+          <linearGradient id="fh-sweep-grad" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stop-color="rgba(231,216,180,0)"/>
+            <stop offset="50%" stop-color="rgba(168,211,141,0.9)"/>
+            <stop offset="100%" stop-color="rgba(231,216,180,0)"/>
+          </linearGradient>
+        </defs>
+        <g clip-path="url(#fh-nabla-clip)">
+          <rect x="-60" y="0" width="50" height="100" fill="url(#fh-sweep-grad)" opacity="0.18" class="nabla-shim"/>
+        </g>
+        <polygon points="50,92 6,8 94,8" fill="none" stroke="var(--gold)" stroke-width="5" stroke-linejoin="round" opacity="0.75"/>
+        <polygon points="50,92 6,8 94,8" fill="none" stroke="rgba(168,211,141,0.55)" stroke-width="6" stroke-linejoin="round" class="nabla-spark"/>
+        <polygon points="50,92 6,8 94,8" fill="none" stroke="rgba(168,211,141,0.55)" stroke-width="6" stroke-linejoin="round" class="nabla-spark-rev"/>
+      </svg>
+    </div>
     <div class="eyebrow">ManifestYOU · for humans</div>
     <h1>The universe has been listening.<br>Now it will speak in your voice.</h1>
     <p class="lede">A personal intention layer. Daily clarity, grounded in where you actually are, not where you think you should be.</p>
