@@ -783,9 +783,27 @@
 <script>
 async function startCheckout(triggerEl) {
   const btn = triggerEl || document.getElementById('btn-subscribe');
-  const note = document.getElementById('cta-note');
   const origText = btn ? btn.textContent : '';
   if (btn) { btn.textContent = 'Opening checkout…'; btn.style.opacity = '0.7'; btn.disabled = true; }
+
+  function showErr(msg) {
+    console.error('checkout:', msg);
+    if (btn) {
+      btn.textContent = origText;
+      btn.style.opacity = '1';
+      btn.disabled = false;
+      // show error inline below the button
+      let errEl = btn.nextElementSibling;
+      if (!errEl || !errEl.classList.contains('checkout-err')) {
+        errEl = document.createElement('p');
+        errEl.className = 'checkout-err';
+        errEl.style.cssText = 'font-family:JetBrains Mono,monospace;font-size:11px;color:#c97;margin-top:10px;letter-spacing:.05em;';
+        btn.parentNode.insertBefore(errEl, btn.nextSibling);
+      }
+      errEl.textContent = msg;
+    }
+  }
+
   try {
     const res = await fetch('/.netlify/functions/checkout', {
       method: 'POST',
@@ -794,19 +812,13 @@ async function startCheckout(triggerEl) {
     });
     const data = await res.json();
     console.log('checkout response:', res.status, data);
-    const { url, error } = data;
-    if (url) {
-      window.location.href = url;
+    if (data.url) {
+      window.location.href = data.url;
     } else {
-      const msg = error || 'Something went wrong. Try again.';
-      console.error('checkout error:', msg);
-      if (note) note.textContent = msg;
-      if (btn) { btn.textContent = origText; btn.style.opacity = '1'; btn.disabled = false; }
+      showErr(data.error || 'Something went wrong — check console for details.');
     }
   } catch (err) {
-    console.error('checkout fetch failed:', err);
-    if (note) note.textContent = 'Could not reach checkout. Try again.';
-    if (btn) { btn.textContent = origText; btn.style.opacity = '1'; btn.disabled = false; }
+    showErr('Could not reach checkout: ' + err.message);
   }
 }
 
