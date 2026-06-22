@@ -74,11 +74,35 @@ const CORS = {
   "Access-Control-Allow-Headers": "Content-Type, X-API-Key"
 };
 
-function isValidKey(headers) {
+const crypto = require('crypto');
+
+async function isValidKey(headers) {
+  const provided = (headers["x-api-key"] || headers["X-API-Key"] || "").trim();
+  if (!provided) return false;
+
+  // Check static allowlist first (backwards compat for manually issued keys)
   const raw = process.env.VALID_API_KEYS || "";
   const validKeys = raw.split(",").map(k => k.trim()).filter(Boolean);
-  const provided = (headers["x-api-key"] || headers["X-API-Key"] || "").trim();
-  return provided && validKeys.includes(provided);
+  if (validKeys.includes(provided)) return true;
+
+  // Check Supabase for subscription-issued keys
+  if (!process.env.SUPABASE_URL || !process.env.SUPABASE_SERVICE_KEY) return false;
+  const keyHash = crypto.createHash('sha256').update(provided).digest('hex');
+  try {
+    const res = await fetch(
+      `${process.env.SUPABASE_URL}/rest/v1/api_keys?key_hash=eq.${keyHash}&revoked_at=is.null&select=id`,
+      {
+        headers: {
+          apikey: process.env.SUPABASE_SERVICE_KEY,
+          Authorization: `Bearer ${process.env.SUPABASE_SERVICE_KEY}`
+        }
+      }
+    );
+    const data = await res.json();
+    return Array.isArray(data) && data.length > 0;
+  } catch {
+    return false;
+  }
 }
 
 exports.handler = async (event) => {
@@ -94,7 +118,7 @@ exports.handler = async (event) => {
     };
   }
 
-  if (!isValidKey(event.headers || {})) {
+  if (!await isValidKey(event.headers || {})) {
     return {
       statusCode: 401,
       headers: { ...CORS, "Content-Type": "application/json" },
