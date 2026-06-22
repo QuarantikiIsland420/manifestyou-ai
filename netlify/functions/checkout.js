@@ -22,6 +22,7 @@ exports.handler = async (event) => {
     'line_items[0][price]': BASE_PRICE_ID,
     'line_items[0][quantity]': '1',
     'line_items[1][price]': METERED_PRICE_ID,
+    allow_promotion_codes: 'true',
     success_url: 'https://manifestyou.ai/?subscribed=1',
     cancel_url: 'https://manifestyou.ai/'
   });
