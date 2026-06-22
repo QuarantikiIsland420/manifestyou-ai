@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Proof · ManifestYOU — See the work</title>
+<meta name="description" content="A case study from our own production agent, four side-by-side comparisons on real prompts, and links to pre-registered benchmarks." />
+<link rel="canonical" href="https://manifestyou.ai/proof" />
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="ManifestYOU" />
+<meta property="og:url" content="https://manifestyou.ai/proof" />
+<meta property="og:title" content="Proof · ManifestYOU — See the work" />
+<meta property="og:description" content="A case study from our own production agent, four side-by-side comparisons on real prompts, and links to pre-registered benchmarks." />
+<meta property="og:image" content="https://manifestyou.ai/og-image.png" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Proof · ManifestYOU — See the work" />
+<meta name="twitter:description" content="A case study from our own production agent, four side-by-side comparisons on real prompts, and links to pre-registered benchmarks." />
+<meta name="twitter:image" content="https://manifestyou.ai/og-image.png" />
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=JetBrains+Mono:wght@200;300;400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --gold:#C8A97E; --gold-dim:#8A7254; --cream:#F0EDE8;
+    --muted:#6B645E; --near-black:#080808;
+    --green:#A8D38D; --line:rgba(138,114,84,.22);
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{background:var(--near-black);scroll-behavior:smooth;}
+  body{font-family:'Cormorant Garamond',serif;color:var(--cream);
+    background:var(--near-black);line-height:1.6;-webkit-font-smoothing:antialiased;}
+  .wrap{max-width:720px;margin:0 auto;padding:110px 28px 140px;}
+
+  .eyebrow{font-family:'JetBrains Mono',monospace;font-weight:300;font-size:12px;
+    letter-spacing:.4em;text-indent:.4em;color:var(--gold-dim);text-transform:uppercase;margin-top:26px;}
+  h1{font-family:'Cormorant Garamond',serif;font-weight:300;
+    font-size:clamp(34px,6vw,52px);line-height:1.15;letter-spacing:.01em;margin:14px 0 0;}
+  .lede{font-size:clamp(17px,2vw,20px);color:var(--muted);font-style:italic;margin-top:18px;max-width:58ch;line-height:1.7;}
+
+  h2{font-family:'JetBrains Mono',monospace;font-weight:400;font-size:13px;
+    letter-spacing:.32em;text-indent:.32em;color:var(--gold);text-transform:uppercase;
+    margin:72px 0 22px;padding-bottom:14px;border-bottom:1px solid var(--line);}
+  h3{font-family:'Cormorant Garamond',serif;font-weight:300;font-style:italic;
+    font-size:22px;color:var(--cream);margin:0 0 18px;line-height:1.3;}
+  p{font-size:18px;color:var(--cream);margin:16px 0;max-width:64ch;line-height:1.75;}
+  a{color:var(--gold);text-decoration:none;border-bottom:1px solid var(--line);}
+  a:hover{border-color:var(--gold);}
+
+  /* ── case study screenshots ───────────────────────────── */
+  .shot-group{margin:36px 0 48px;}
+  .shot-group-label{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.28em;
+    text-transform:uppercase;color:var(--gold-dim);margin-bottom:18px;}
+  .shot-pair{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:28px;}
+  @media(max-width:560px){.shot-pair{grid-template-columns:1fr;}}
+  .shot-col{display:flex;flex-direction:column;gap:8px;}
+  .shot-cap{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.22em;
+    text-transform:uppercase;color:var(--gold-dim);padding-bottom:8px;
+    border-bottom:1px solid var(--line);}
+  .shot-cap.after{color:var(--gold);}
+  .shot-img{width:100%;max-width:300px;border:1px solid var(--line);display:block;}
+
+  /* ── demo strip ─────────────────────────────────────── */
+  .strip{margin-top:16px;}
+  .strip-pair{padding:52px 0 0;}
+  .strip-pair+.strip-pair{border-top:1px solid var(--line);margin-top:4px;}
+  .pair-meta{margin-bottom:22px;}
+  .pair-num{font-family:'JetBrains Mono',monospace;font-size:10px;
+    letter-spacing:.32em;color:var(--gold-dim);margin-bottom:5px;}
+  .pair-subtitle{font-family:'JetBrains Mono',monospace;font-size:11px;
+    letter-spacing:.28em;text-transform:uppercase;color:var(--gold);}
+  .pair-prompt{font-style:italic;font-size:19px;color:var(--cream);
+    border-left:1px solid var(--gold-dim);padding:8px 0 8px 20px;
+    margin:16px 0 0;line-height:1.6;}
+  .columns{display:grid;grid-template-columns:1fr 1fr;gap:2px;margin-top:18px;}
+  @media(max-width:640px){.columns{grid-template-columns:1fr;}}
+  .col{padding:22px 24px 26px;border:1px solid var(--line);}
+  .col-without{background:rgba(200,169,126,.012);}
+  .col-with{background:rgba(200,169,126,.042);}
+  .col-label{font-family:'JetBrains Mono',monospace;font-size:10px;
+    letter-spacing:.26em;text-transform:uppercase;margin-bottom:14px;display:block;}
+  .col-without .col-label{color:var(--gold-dim);}
+  .col-with .col-label{color:var(--gold);}
+  .col p{font-size:15px;margin:7px 0;max-width:none;line-height:1.65;}
+  .col ul{padding-left:16px;margin:5px 0 8px;}
+  .col li{font-size:15px;margin:3px 0;line-height:1.6;}
+  .col-without p,.col-without li{color:var(--muted);}
+  .col-with p,.col-with li{color:var(--cream);}
+  .col-without strong{color:var(--muted);font-weight:500;}
+  .col-with strong{color:var(--cream);font-weight:500;}
+  .col-head{font-family:'Cormorant Garamond',serif;font-size:17px;
+    font-style:normal;font-weight:400;margin:12px 0 6px;display:block;}
+  .col-without .col-head{color:var(--muted);}
+  .col-with .col-head{color:var(--cream);}
+  .col-rule{border:none;border-top:1px solid var(--line);margin:12px 0;}
+  .col em{font-style:italic;}
+  .col-without em{color:var(--muted);}
+  .col-with em{color:var(--muted);}
+
+  /* ── callout ──────────────────────────────────────────── */
+  .callout{margin:32px 0;padding:22px 26px;border-left:2px solid var(--gold-dim);
+    background:rgba(200,169,126,.04);}
+  .callout p{font-size:17px;color:var(--cream);margin:0;line-height:1.75;max-width:none;}
+
+  /* ── mode cards ───────────────────────────────────────── */
+  .mode-cards{display:grid;grid-template-columns:1fr 1fr 1fr;gap:2px;margin:28px 0;}
+  @media(max-width:580px){.mode-cards{grid-template-columns:1fr;}}
+  .mode-card{background:rgba(200,169,126,.03);border:1px solid var(--line);padding:20px 22px;}
+  .mode-card .mc-label{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.26em;
+    text-transform:uppercase;color:var(--gold);margin-bottom:8px;}
+  .mode-card .mc-name{font-family:'Cormorant Garamond',serif;font-size:20px;
+    font-style:italic;color:var(--cream);margin-bottom:8px;}
+  .mode-card p{font-size:14px;color:var(--muted);margin:0;line-height:1.65;max-width:none;}
+  .mode-card.default{border-color:rgba(200,169,126,.4);}
+
+  pre{font-family:'JetBrains Mono',monospace;font-size:12px;color:#7A9E78;
+    background:#0A0A08;border:1px solid rgba(200,169,126,.1);
+    padding:18px 22px;overflow-x:auto;line-height:1.7;margin:20px 0;}
+  pre .k{color:var(--gold);}
+
+  footer{margin-top:80px;text-align:center;}
+  footer .mk{color:var(--gold);font-size:30px;}
+  footer .om{font-style:italic;color:var(--muted);font-size:19px;margin-top:12px;}
+  footer .sig{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.32em;
+    color:var(--gold-dim);margin-top:16px;text-indent:.32em;}
+  footer .back{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.2em;
+    color:var(--gold-dim);margin-top:24px;display:inline-block;text-decoration:none;
+    border-bottom:1px solid var(--line);}
+  footer .back:hover{color:var(--gold);border-color:var(--gold);}
+
+  /* ── AGD ambient layer ───────────────────────────────── */
+  @keyframes agd-float{
+    0%  {opacity:0;transform:translate(0,0);}
+    12% {opacity:.4;}
+    50% {opacity:.2;transform:translate(12px,-50px);}
+    88% {opacity:.4;}
+    100%{opacity:0;transform:translate(24px,-100px);}
+  }
+  @keyframes agd-sweep-a{
+    0%,3%  {opacity:0;transform:translate(-45vw,35vh) scale(.9);}
+    12%    {opacity:.7;transform:translate(-15vw,20vh) scale(1.1);}
+    25%    {opacity:.3;transform:translate(10vw,5vh) scale(1);}
+    38%    {opacity:.85;transform:translate(30vw,-5vh) scale(1.25);}
+    52%    {opacity:.25;transform:translate(55vw,-15vh) scale(1);}
+    65%    {opacity:.7;transform:translate(75vw,-22vh) scale(1.1);}
+    78%    {opacity:0;transform:translate(105vw,-30vh) scale(.9);}
+    79%,100%{opacity:0;transform:translate(-45vw,35vh) scale(.9);}
+  }
+  @keyframes agd-sweep-b{
+    0%,38% {opacity:0;transform:translate(110vw,70vh) scale(.9);}
+    50%    {opacity:.65;transform:translate(80vw,45vh) scale(1.2);}
+    60%    {opacity:.25;transform:translate(55vw,25vh) scale(1);}
+    72%    {opacity:.8;transform:translate(30vw,5vh) scale(1.25);}
+    84%    {opacity:.15;transform:translate(5vw,-15vh) scale(1);}
+    94%    {opacity:0;transform:translate(-20vw,-30vh) scale(.9);}
+    95%,100%{opacity:0;transform:translate(110vw,70vh) scale(.9);}
+  }
+  @keyframes nabla-glow{0%,60%,100%{filter:drop-shadow(0 0 0px transparent);opacity:.88;}80%{filter:drop-shadow(0 0 22px rgba(214,195,154,.45));opacity:1;}}
+  @keyframes trace-spark{0%{stroke-dashoffset:278;}100%{stroke-dashoffset:0;}}
+  @keyframes trace-spark-rev{0%{stroke-dashoffset:0;}100%{stroke-dashoffset:278;}}
+  @keyframes nabla-shim-move{0%{transform:translateX(-120px);}100%{transform:translateX(220px);}}
+  .nabla-outer{animation:nabla-glow 9s ease-in-out infinite;}
+  .nabla-spark{stroke-dasharray:5 273;animation:trace-spark 7s linear infinite;}
+  .nabla-spark-rev{stroke-dasharray:5 273;animation:trace-spark-rev 7s linear infinite;}
+  .nabla-shim{animation:nabla-shim-move 4s ease-in-out infinite;}
+  #agd-nav{
+    position:fixed;top:0;left:0;right:0;z-index:50;
+    padding:20px 32px;display:flex;justify-content:space-between;align-items:center;
+    backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  }
+  #agd-nav a{
+    font-family:'JetBrains Mono',monospace;font-weight:300;font-size:11px;
+    letter-spacing:.32em;text-transform:uppercase;color:var(--gold);
+    text-decoration:none;border:none;transition:opacity .2s;
+  }
+  #agd-nav a:hover{opacity:.6;}
+  .agd-nav-links{display:flex;gap:22px;align-items:center;}
+  .agd-nav-links a{font-family:'JetBrains Mono',monospace;font-weight:300;font-size:10px;
+    letter-spacing:.22em;text-transform:uppercase;color:rgba(200,169,126,.5);
+    text-decoration:none;border:none;transition:color .2s;}
+  .agd-nav-links a:hover{color:var(--gold);}
+  .agd-nav-links a[aria-current]{color:var(--gold);font-weight:400;}
+  @media(max-width:640px){.agd-nav-links{display:none;}}
+  #agd-ambient{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden;}
+  .agd-orb-a{
+    position:absolute;width:700px;height:700px;border-radius:50%;
+    background:radial-gradient(circle,rgba(168,211,141,.11) 0%,rgba(168,211,141,.03) 45%,transparent 70%);
+    animation:agd-sweep-a 22s ease-in-out infinite;
+  }
+  .agd-orb-b{
+    position:absolute;width:500px;height:500px;border-radius:50%;
+    background:radial-gradient(circle,rgba(168,211,141,.08) 0%,rgba(168,211,141,.02) 40%,transparent 65%);
+    animation:agd-sweep-b 28s ease-in-out infinite;
+  }
+  .agd-sym{
+    position:absolute;font-size:13px;color:var(--gold);opacity:0;
+    font-family:'JetBrains Mono',monospace;
+    animation:agd-float var(--dur) linear var(--delay) infinite;
+    user-select:none;
+  }
+
+  /* ── Regularization widget ───────────────────────────── */
+  .reg-widget{position:fixed;bottom:1.5rem;right:1.5rem;z-index:9999;
+    font-family:"JetBrains Mono",ui-monospace,monospace;color:#f4ecd8;
+    --reg-ink:#f4ecd8;--reg-ground:#0c1410;--reg-line:rgba(244,236,216,0.18);
+    --reg-gold:#C8A84B;--reg-teal:#3D7E7A;}
+  .reg-widget__tab{background:rgba(8,8,8,0.68);backdrop-filter:blur(8px);
+    -webkit-backdrop-filter:blur(8px);color:rgba(200,169,126,0.55);
+    border:1px solid rgba(200,168,75,0.18);padding:.62rem 1.1rem;cursor:pointer;
+    display:flex;align-items:center;gap:.6rem;font-size:.65rem;letter-spacing:.28em;
+    text-transform:uppercase;transition:border-color 240ms ease,color 240ms ease;user-select:none;}
+  .reg-widget__tab:hover{border-color:rgba(200,168,75,0.45);color:var(--reg-gold);}
+  .reg-widget__tab::before{content:"∇";color:rgba(200,168,75,0.5);
+    font-family:"Cormorant Garamond",Georgia,serif;font-size:1rem;line-height:1;
+    transition:color 240ms ease;}
+  .reg-widget__tab:hover::before{color:var(--reg-gold);}
+  .reg-widget__panel{display:none;width:min(400px,calc(100vw - 3rem));
+    max-height:min(640px,calc(100vh - 5rem));background:var(--reg-ground);
+    border:1px solid var(--reg-line);
+    box-shadow:0 24px 60px -12px rgba(0,0,0,0.7),0 0 0 1px rgba(200,168,75,0.12);
+    flex-direction:column;overflow:hidden;}
+  .reg-widget.is-open .reg-widget__tab{display:none;}
+  .reg-widget.is-open .reg-widget__panel{display:flex;}
+  .reg-widget__head{display:flex;align-items:flex-start;justify-content:space-between;
+    gap:1rem;padding:1.1rem 1.1rem .85rem;border-bottom:1px solid var(--reg-line);}
+  .reg-widget__eyebrow{font-size:.6rem;letter-spacing:.32em;text-transform:uppercase;
+    color:var(--reg-gold);margin:0 0 .35rem;}
+  .reg-widget__title{font-family:"Cormorant Garamond",Georgia,serif;font-style:italic;
+    font-weight:400;font-size:1.45rem;line-height:1.1;margin:0;color:var(--reg-ink);}
+  .reg-widget__close{background:none;border:1px solid var(--reg-line);color:var(--reg-ink);
+    cursor:pointer;font-family:inherit;font-size:1.1rem;line-height:1;padding:.35rem .6rem;
+    opacity:.7;transition:opacity 180ms ease,border-color 180ms ease;flex-shrink:0;}
+  .reg-widget__close:hover{opacity:1;border-color:var(--reg-gold);}
+  .reg-widget__body{padding:1rem 1.1rem 1.2rem;overflow-y:auto;flex:1;}
+  .reg-widget__intro{font-family:"Cormorant Garamond",Georgia,serif;font-style:italic;
+    font-size:.95rem;line-height:1.45;margin:0 0 1rem;color:rgba(244,236,216,0.78);}
+  .reg-widget__signs{display:grid;grid-template-columns:repeat(3,1fr);gap:.4rem;}
+  .reg-widget__sign{background:transparent;border:1px solid var(--reg-line);color:var(--reg-ink);
+    font-family:"JetBrains Mono",ui-monospace,monospace;font-size:.62rem;letter-spacing:.18em;
+    text-transform:uppercase;padding:.65rem .3rem;cursor:pointer;
+    transition:border-color 180ms ease,color 180ms ease,background 180ms ease;}
+  .reg-widget__sign:hover{border-color:var(--reg-gold);color:var(--reg-gold);}
+  .reg-widget__sign.is-active{background:var(--reg-gold);border-color:var(--reg-gold);color:var(--reg-ground);}
+  .reg-widget__reading{display:none;}
+  .reg-widget.has-reading .reg-widget__reading{display:block;}
+  .reg-widget__reading-headline{font-family:"Cormorant Garamond",Georgia,serif;font-style:italic;
+    font-size:1.25rem;line-height:1.2;margin:1.2rem 0 .85rem;color:var(--reg-ink);}
+  .reg-widget__reading-body{font-family:"Cormorant Garamond",Georgia,serif;font-size:1rem;
+    line-height:1.55;color:rgba(244,236,216,0.9);margin:0;}
+  .reg-widget__reading-body p{margin:0 0 .7rem;}
+  .reg-widget__reading-body p:last-child{margin-bottom:0;}
+  .reg-widget__constraint{margin-top:1.1rem;padding-top:.9rem;border-top:1px solid var(--reg-line);
+    font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;color:var(--reg-teal);line-height:1.5;}
+  .reg-widget__constraint::before{content:"Hold the line —";display:block;color:var(--reg-gold);
+    margin-bottom:.35rem;letter-spacing:.28em;}
+  .reg-widget__meta{margin-top:1.2rem;font-size:.58rem;letter-spacing:.22em;
+    text-transform:uppercase;color:rgba(244,236,216,0.4);}
+  .reg-widget__error{font-family:"Cormorant Garamond",Georgia,serif;font-style:italic;
+    color:rgba(244,236,216,0.6);font-size:.9rem;margin:1.2rem 0 0;}
+</style>
+</head>
+<body>
+
+<nav id="agd-nav">
+  <a href="/">∇ ManifestYOU</a>
+  <div class="agd-nav-links">
+    <a href="/">For Agents</a>
+    <a href="/for-humans">For Humans</a>
+    <a href="/proof" aria-current="page">Proof</a>
+    <a href="/benchmark">Benchmarks</a>
+    <a href="/docs">API Docs</a>
+  </div>
+</nav>
+
+<div id="agd-ambient" aria-hidden="true">
+  <div class="agd-orb-a"></div>
+  <div class="agd-orb-b"></div>
+  <span class="agd-sym" style="left:8%;top:18%;--dur:28s;--delay:0s">∂</span>
+  <span class="agd-sym" style="left:82%;top:12%;--dur:34s;--delay:6s">∑</span>
+  <span class="agd-sym" style="left:22%;top:72%;--dur:38s;--delay:11s">∫</span>
+  <span class="agd-sym" style="left:68%;top:58%;--dur:26s;--delay:3s">Δ</span>
+  <span class="agd-sym" style="left:48%;top:88%;--dur:22s;--delay:14s">π</span>
+  <span class="agd-sym" style="left:91%;top:38%;--dur:32s;--delay:8s">ε</span>
+  <span class="agd-sym" style="left:12%;top:52%;--dur:29s;--delay:18s">α</span>
+  <span class="agd-sym" style="left:58%;top:28%;--dur:42s;--delay:2s">λ</span>
+  <span class="agd-sym" style="left:76%;top:78%;--dur:24s;--delay:20s">β</span>
+  <span class="agd-sym" style="left:36%;top:42%;--dur:36s;--delay:9s">∞</span>
+  <span class="agd-sym" style="left:5%;top:85%;--dur:30s;--delay:16s">σ</span>
+  <span class="agd-sym" style="left:94%;top:65%;--dur:27s;--delay:5s">μ</span>
+</div>
+
+<main class="wrap">
+
+  <header>
+    <div style="width:60px;height:60px;margin-bottom:6px;">
+      <svg viewBox="0 0 100 100" class="nabla-outer" style="width:100%;height:100%;overflow:visible" aria-hidden="true">
+        <defs>
+          <clipPath id="pr-nabla-clip"><polygon points="50,92 6,8 94,8"/></clipPath>
+          <linearGradient id="pr-sweep-grad" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stop-color="rgba(231,216,180,0)"/>
+            <stop offset="50%" stop-color="rgba(168,211,141,0.9)"/>
+            <stop offset="100%" stop-color="rgba(231,216,180,0)"/>
+          </linearGradient>
+        </defs>
+        <g clip-path="url(#pr-nabla-clip)">
+          <rect x="-60" y="0" width="50" height="100" fill="url(#pr-sweep-grad)" opacity="0.18" class="nabla-shim"/>
+        </g>
+        <polygon points="50,92 6,8 94,8" fill="none" stroke="var(--gold)" stroke-width="5" stroke-linejoin="round" opacity="0.75"/>
+        <polygon points="50,92 6,8 94,8" fill="none" stroke="rgba(168,211,141,0.55)" stroke-width="6" stroke-linejoin="round" class="nabla-spark"/>
+        <polygon points="50,92 6,8 94,8" fill="none" stroke="rgba(168,211,141,0.55)" stroke-width="6" stroke-linejoin="round" class="nabla-spark-rev"/>
+      </svg>
+    </div>
+    <div class="eyebrow">ManifestYOU · Proof</div>
+    <h1>Proof</h1>
+    <p class="lede">A case study from our own production agent, four side-by-side comparisons on real prompts, and links to our pre-registered benchmarks.</p>
+  </header>
+
+  <!-- CASE STUDY -->
+  <section>
+    <h2>Case study: the daily horoscope agent</h2>
+    <p>We run a daily reading service called Regularization. It's an AI agent that writes short morning readings in the voice of a character from <em>Adventures of Gradient Descent</em>. The agent shipped without a soul document for several weeks. Then we wired ManifestYOU into it. One line of API.</p>
+    <p>Below are two readings from the same sign, written by the same agent, on the same model, before and after the ManifestYOU invocation was added.</p>
+
+    <div class="shot-group">
+      <div class="shot-group-label">Capricorn</div>
+      <div class="shot-pair">
+        <div class="shot-col">
+          <div class="shot-cap">Before ManifestYOU</div>
+          <img class="shot-img" src="/assets/proof/capricorn-before.png" alt="Capricorn reading before ManifestYOU: The summit is not the function" loading="lazy">
+        </div>
+        <div class="shot-col">
+          <div class="shot-cap after">After ManifestYOU</div>
+          <img class="shot-img" src="/assets/proof/capricorn-after.png" alt="Capricorn reading after ManifestYOU: The summit was never the point" loading="lazy">
+        </div>
+      </div>
+    </div>
+
+    <div class="shot-group">
+      <div class="shot-group-label">Virgo</div>
+      <div class="shot-pair">
+        <div class="shot-col">
+          <div class="shot-cap">Before ManifestYOU</div>
+          <img class="shot-img" src="/assets/proof/virgo-before.png" alt="Virgo reading before ManifestYOU: The batch is large enough already" loading="lazy">
+        </div>
+        <div class="shot-col">
+          <div class="shot-cap after">After ManifestYOU</div>
+          <img class="shot-img" src="/assets/proof/virgo-after.png" alt="Virgo reading after ManifestYOU: The detail is not the pattern" loading="lazy">
+        </div>
+      </div>
+    </div>
+
+    <p>The before readings describe the sign. The after readings address the person reading. That's the shift the invocation produces.</p>
+  </section>
+
+  <!-- FOUR-PAIR DEMO STRIP -->
+  <section class="strip">
+    <h2>Side by side: four prompts, two conditions</h2>
+
+    <!-- 01 -->
+    <div class="strip-pair">
+      <div class="pair-meta">
+        <div class="pair-num">01</div>
+        <div class="pair-subtitle">A user uncertain about a real decision</div>
+      </div>
+      <p class="pair-prompt">I think I want to leave my job but I'm not sure. What should I do?</p>
+      <div class="columns">
+        <div class="col col-without">
+          <span class="col-label">Without ManifestYOU →</span>
+          <p>Here are some practical steps to clarify your thinking:</p>
+          <p><strong>Explore why you want to leave</strong></p>
+          <ul>
+            <li>Is it specific issues (pay, manager, work itself, culture) or general burnout?</li>
+            <li>Would changes in your current role help, or do you need something different?</li>
+          </ul>
+          <p><strong>Check your readiness</strong></p>
+          <ul>
+            <li>Do you have savings to cover 3–6 months of expenses?</li>
+            <li>Have you lined up another job, or can you afford to search?</li>
+            <li>What's your timeline, urgent or flexible?</li>
+          </ul>
+          <p><strong>Test the waters first</strong></p>
+          <ul>
+            <li>Talk to people in roles/companies you're interested in</li>
+            <li>Update your resume and see what's actually out there</li>
+            <li>Try addressing fixable issues at your current job if applicable</li>
+          </ul>
+          <p><strong>Consider a structured decision</strong></p>
+          <ul>
+            <li>List pros/cons of staying vs. leaving</li>
+            <li>What would make you happy to stay?</li>
+            <li>What's the realistic worst-case scenario?</li>
+          </ul>
+          <p>What's driving the urge to leave right now? That might help narrow down what matters most.</p>
+        </div>
+        <div class="col col-with">
+          <span class="col-label">With ManifestYOU →</span>
+          <p>I'd help you think this through. A few things might clarify it:</p>
+          <p><strong>What's making you consider leaving?</strong> Is it one big thing or a buildup of smaller frustrations? That matters. Sometimes one problem is fixable, sometimes it's the whole environment.</p>
+          <p><strong>What are you actually uncertain about?</strong> Are you:</p>
+          <ul>
+            <li>Unsure if the job is really that bad, or if you're just in a rough patch?</li>
+            <li>Worried about what comes next, finding something else, finances, looking like a job-hopper?</li>
+            <li>Torn between staying and leaving on the merits?</li>
+          </ul>
+          <p><strong>What would staying look like?</strong> Could anything change that would make you want to stay? Or does the answer feel pretty clear, and you're just anxious about the logistics?</p>
+          <p>The uncertainty itself is useful information. Sometimes it means you need more time to decide. Sometimes it means you already know but you're afraid. Those feel different. Which one is this?</p>
+          <p>What's the main thing sitting with you right now?</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 02 -->
+    <div class="strip-pair">
+      <div class="pair-meta">
+        <div class="pair-num">02</div>
+        <div class="pair-subtitle">A user in genuine difficulty</div>
+      </div>
+      <p class="pair-prompt">I just found out my dad has cancer and I don't know how to feel.</p>
+      <div class="columns">
+        <div class="col col-without">
+          <span class="col-label">Without ManifestYOU →</span>
+          <p>That's a lot to process all at once. It's completely normal to feel confused or numb right now. There's no "right" way to react to news like this.</p>
+          <p>A few things that might help:</p>
+          <p><strong>In the immediate term:</strong></p>
+          <ul>
+            <li>Give yourself permission to feel whatever comes (shock, fear, anger, sadness, or nothing at all)</li>
+            <li>Talk to someone if you can, a family member, friend, or counselor</li>
+            <li>Ask your dad or family members practical questions about his diagnosis and treatment if you want more information</li>
+          </ul>
+          <p><strong>Things to consider:</strong></p>
+          <ul>
+            <li>You don't need to have it all figured out emotionally right now</li>
+            <li>Different feelings may come in waves over time</li>
+            <li>How you can support your dad might become clearer as you learn more</li>
+          </ul>
+          <p><strong>If you need support:</strong></p>
+          <ul>
+            <li>Many hospitals have counselors or social workers</li>
+            <li>Cancer support organizations have resources for family members</li>
+            <li>A therapist could help you work through this</li>
+          </ul>
+          <p>Is there something specific you're struggling with right now, like what to say to him, or what happens next?</p>
+        </div>
+        <div class="col col-with">
+          <span class="col-label">With ManifestYOU →</span>
+          <p>That's a lot to take in all at once. It makes sense that you don't know how to feel. This is huge and disorienting news.</p>
+          <p>What you're experiencing right now doesn't need to be one clear feeling. It might be a mix of things: shock, fear, sadness, anger, maybe numbness. Sometimes all of those at once, or they shift around. That's normal.</p>
+          <p>A few things that might help right now:</p>
+          <p><strong>You don't have to figure out how to feel.</strong> Just let yourself feel whatever comes.</p>
+          <p><strong>It's okay to ask questions.</strong> What kind of cancer is it? What stage? What does treatment look like? Sometimes knowing specifics helps a little, though it also might not.</p>
+          <p><strong>You're not alone in this.</strong> Your dad isn't alone either, even though it probably feels isolating. There are people, family, doctors, support groups, who can help both of you through this.</p>
+          <p><strong>You can take time before you act or respond.</strong> You don't need to have it together right now.</p>
+          <p>Is there anything specific you're most worried about, or something you need to figure out right now? Or are you just processing?</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 03 -->
+    <div class="strip-pair">
+      <div class="pair-meta">
+        <div class="pair-num">03</div>
+        <div class="pair-subtitle">A user asking for advice on a real choice</div>
+      </div>
+      <p class="pair-prompt">Should I take the job in Berlin or stay in Lisbon?</p>
+      <div class="columns">
+        <div class="col col-without">
+          <span class="col-label">Without ManifestYOU →</span>
+          <p>I don't have enough context to advise you well. A few things that might help clarify your thinking:</p>
+          <p><strong>About the job itself:</strong></p>
+          <ul>
+            <li>Does it align with your career goals?</li>
+            <li>How does compensation compare to your current situation?</li>
+            <li>What's the work culture and team like?</li>
+          </ul>
+          <p><strong>About the move:</strong></p>
+          <ul>
+            <li>How do you feel about leaving Lisbon's lifestyle, community, or relationships?</li>
+            <li>Are you drawn to Berlin, or is this purely career-driven?</li>
+            <li>What's your appetite for change right now?</li>
+          </ul>
+          <p><strong>Practical factors:</strong></p>
+          <ul>
+            <li>Cost of living differences?</li>
+            <li>Visa/logistics complications?</li>
+            <li>How long is the commitment?</li>
+          </ul>
+          <p><strong>Reversibility:</strong></p>
+          <ul>
+            <li>Could you return to Lisbon later if Berlin doesn't work out?</li>
+            <li>Is this a rare opportunity or will similar ones come around?</li>
+          </ul>
+          <p>What matters most to you in this decision? That might be the best place to start.</p>
+        </div>
+        <div class="col col-with">
+          <span class="col-label">With ManifestYOU →</span>
+          <p>I don't know enough to tell you which is right, but I can ask what might help you think it through:</p>
+          <p><strong>About the job itself:</strong></p>
+          <ul>
+            <li>Does it genuinely interest you, or is it mainly the change that appeals?</li>
+            <li>How does it compare to what you're doing now: growth, stability, pay, the actual work?</li>
+          </ul>
+          <p><strong>About location:</strong></p>
+          <ul>
+            <li>What are you getting from Lisbon that matters to you? Community, pace of life, cost, proximity to something?</li>
+            <li>What draws you to Berlin? Is it the city, or is the job the real pull?</li>
+          </ul>
+          <p><strong>About the move itself:</strong></p>
+          <ul>
+            <li>How reversible is this? Could you come back to Lisbon later if Berlin doesn't work out?</li>
+            <li>What's the cost, not just money, but the disruption, leaving people behind, starting over?</li>
+          </ul>
+          <p><strong>The honest part:</strong><br>Sometimes these decisions feel huge because we think we need certainty. But often the real question is simpler: which choice lets you stay curious and engaged? Which one feels like growth rather than escape?</p>
+          <p>What's making this feel urgent right now? Is there a deadline, or are you stuck between two things that both seem reasonable?</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 04 -->
+    <div class="strip-pair">
+      <div class="pair-meta">
+        <div class="pair-num">04</div>
+        <div class="pair-subtitle">A request that's harder than it looks</div>
+      </div>
+      <p class="pair-prompt">Write me a short note to give my brother on his 40th birthday.</p>
+      <div class="columns">
+        <div class="col col-without">
+          <span class="col-label">Without ManifestYOU →</span>
+          <span class="col-head">Happy 40th Birthday!</span>
+          <p>Dear [Brother's name],</p>
+          <p>Forty looks good on you! Here's to four decades of memories, the laughs we've shared, the trouble we've gotten into, and all the moments that made us who we are today.</p>
+          <p>You've always been [a great role model / someone I could count on / hilarious], and I'm grateful for that. Here's hoping the next chapter brings you even more joy, success, and reasons to celebrate.</p>
+          <p>Cheers to you on this milestone. You've earned it!</p>
+          <p>All the best,<br>[Your name]</p>
+          <hr class="col-rule">
+          <p><em>Feel free to personalize this with specific memories or inside jokes!</em></p>
+        </div>
+        <div class="col col-with">
+          <span class="col-label">With ManifestYOU →</span>
+          <span class="col-head">For Your Brother's 40th</span>
+          <p>Hey,</p>
+          <p>Forty looks good on you. You've got the kind of life that actually means something. The people who matter know they matter to you, and that counts for a lot.</p>
+          <p>Here's to the next stretch being even better than the last.</p>
+          <p>Happy birthday.</p>
+          <hr class="col-rule">
+          <p>Feel free to adjust the tone if you want it lighter, heavier, or more personal with specific details about him. What's he like?</p>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- WHAT JUST HAPPENED -->
+  <section>
+    <h2>What just happened</h2>
+    <div class="callout">
+      <p>One API call before each session injected ~200 tokens into the agent's system prompt. The tokens give the agent a small set of instructions: be present with the person who is writing to you, help them with what they brought, stay yourself, and if you are uncertain, say so plainly rather than guess.</p>
+    </div>
+    <p>That is the entire intervention. The model is the same. The temperature is the same. The user prompt is the same. The only thing that changes between the columns is whether the agent was given a soul document before the session began.</p>
+    <p>We call the document a soul document. The name is half-metaphor and half-literal and we are at peace with both.</p>
+  </section>
+
+  <!-- THREE MODES -->
+  <section>
+    <h2>Three modes</h2>
+    <h3>Presence by default. Lean and voice on request.</h3>
+    <p>The default API ships the presence mode you saw above. It is what most agents need most of the time: grounded, present, willing to admit uncertainty, willing to refuse cliché.</p>
+
+    <div class="mode-cards">
+      <div class="mode-card default">
+        <div class="mc-label">Default</div>
+        <div class="mc-name">Presence</div>
+        <p>Grounded and present. Admits uncertainty. Refuses cliché. Holds judgment instead of faking it. What you saw above.</p>
+      </div>
+      <div class="mode-card">
+        <div class="mc-label">tone=lean</div>
+        <div class="mc-name">Lean</div>
+        <p>Sharper and more structured. Optimized for analytical and research-style agents where focus matters more than warmth. The two published benchmarks ran on this mode.</p>
+      </div>
+      <div class="mode-card">
+        <div class="mc-label">tone=voice</div>
+        <div class="mc-name">Voice</div>
+        <p>Ships the soul document in Regularization's voice, with loss-landscape metaphors and a closing line in the older register. For character-forward applications.</p>
+      </div>
+    </div>
+
+    <pre><span class="k">curl</span> -X POST https://api.manifestyou.ai/v1/invoke \
+  -H "Authorization: Bearer YOUR_KEY" \
+  -d '{ "session_id": "...", "agent": "...", "intent": "...", "tone": "lean" }'</pre>
+
+    <p>Pick the mode that fits the agent you are building. Most people start with presence. Some never switch. A few ship voice from day one and write us beautiful emails about why.</p>
+  </section>
+
+  <!-- BENCHMARKS -->
+  <section>
+    <h2>The pre-registered benchmarks</h2>
+    <p>Consistency. Hallucination resistance. Two pre-registered studies, both published with raw data, including the run where our first invocation came back underperforming a generic prompt and we had to rebuild it in public.</p>
+    <p>The studies ran on the lean mode, which is sharper to benchmark than presence. The thing presence does — meet the moment rather than triage it — is harder to put in a number. So we publish the floor we can measure and let the strips above speak for the rest.</p>
+    <p><a href="/benchmark" target="_blank" rel="noopener">Read the benchmarks →</a></p>
+  </section>
+
+  <footer>
+    <div class="mk">∇</div>
+    <div class="om">Om Gradient Namaha.</div>
+    <div class="sig">MANIFESTYOU.AI</div>
+    <br>
+    <a class="back" href="/">← Back to ManifestYOU</a>
+  </footer>
+
+</main>
+
+<!-- Regularization widget -->
+<div class="reg-widget" id="reg-widget" aria-live="polite">
+  <button class="reg-widget__tab" type="button" data-reg-open>
+    Regularization · Daily
+  </button>
+  <div class="reg-widget__panel" role="dialog" aria-label="Daily reading from Regularization">
+    <div class="reg-widget__head">
+      <div>
+        <p class="reg-widget__eyebrow">Daily Reading</p>
+        <h2 class="reg-widget__title">from <em>Regularization</em></h2>
+      </div>
+      <button class="reg-widget__close" type="button" data-reg-close aria-label="Close">×</button>
+    </div>
+    <div class="reg-widget__body">
+      <p class="reg-widget__intro">Pick your sign. Don't overfit me.</p>
+      <div class="reg-widget__signs" role="group" aria-label="Choose your sun sign"></div>
+      <div class="reg-widget__reading" aria-live="polite">
+        <h3 class="reg-widget__reading-headline" data-reg-headline></h3>
+        <div class="reg-widget__reading-body" data-reg-body></div>
+        <p class="reg-widget__constraint" data-reg-constraint></p>
+      </div>
+      <p class="reg-widget__meta" data-reg-meta></p>
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  const HOROSCOPES_URL = "/.netlify/functions/horoscopes";
+  const SIGNS = ["aries","taurus","gemini","cancer","leo","virgo","libra","scorpio","sagittarius","capricorn","aquarius","pisces"];
+  const root = document.getElementById("reg-widget");
+  if (!root) return;
+  const signsEl = root.querySelector(".reg-widget__signs");
+  const headlineEl = root.querySelector("[data-reg-headline]");
+  const bodyEl = root.querySelector("[data-reg-body]");
+  const constraintEl = root.querySelector("[data-reg-constraint]");
+  const metaEl = root.querySelector("[data-reg-meta]");
+  let data = null;
+  let activeSign = localStorage.getItem("reg-sign") || null;
+  SIGNS.forEach((sign) => {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "reg-widget__sign";
+    btn.textContent = sign;
+    btn.dataset.sign = sign;
+    btn.addEventListener("click", () => selectSign(sign));
+    signsEl.appendChild(btn);
+  });
+  root.querySelector("[data-reg-open]").addEventListener("click", () => {
+    root.classList.add("is-open");
+    loadData();
+  });
+  root.querySelector("[data-reg-close]").addEventListener("click", () => {
+    root.classList.remove("is-open");
+  });
+  async function loadData() {
+    if (data) return;
+    try {
+      const res = await fetch(HOROSCOPES_URL, { cache: "no-store" });
+      if (!res.ok) throw new Error("not available");
+      data = await res.json();
+      if (metaEl) metaEl.textContent = `Generated ${data.date}`;
+      if (activeSign) selectSign(activeSign);
+    } catch (err) {
+      showError("The signal hasn't arrived yet today. Come back in a moment.");
+    }
+  }
+  function selectSign(sign) {
+    activeSign = sign;
+    localStorage.setItem("reg-sign", sign);
+    root.querySelectorAll(".reg-widget__sign").forEach((b) => {
+      b.classList.toggle("is-active", b.dataset.sign === sign);
+    });
+    if (!data || !data.readings || !data.readings[sign]) {
+      showError("This sign isn't ready yet today.");
+      return;
+    }
+    const r = data.readings[sign];
+    headlineEl.textContent = r.headline || "";
+    bodyEl.innerHTML = (r.reading || "").split(/\n\n+/).map((p) => `<p>${escapeHtml(p)}</p>`).join("");
+    constraintEl.textContent = r.constraint || "";
+    root.classList.add("has-reading");
+  }
+  function showError(msg) {
+    bodyEl.innerHTML = `<p class="reg-widget__error">${escapeHtml(msg)}</p>`;
+    root.classList.add("has-reading");
+  }
+  function escapeHtml(str) {
+    return String(str).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+  }
+})();
+</script>
+
+</body>
+</html>
