@@ -26,8 +26,8 @@
     --gold-dim: #8A7254;
     --gold-faint: rgba(200,169,126,0.10);
     --gold-border: rgba(200,169,126,0.22);
-    --cream: #F0EDE8;
-    --muted: #5A5450;
+    --cream: #F8F5F1;
+    --muted: #A09690;
     --near-black: #080808;
     --green: #A8D38D; --gold-soft: rgba(214,195,154,0.9);
     --surface: #0D0D0B;
@@ -39,7 +39,7 @@
     font-family: 'JetBrains Mono', monospace;
     font-weight: 300;
     background: var(--near-black);
-    color: #908070;
+    color: #C0B0A0;
     min-height: 100vh;
     -webkit-font-smoothing: antialiased;
   }
@@ -59,7 +59,7 @@
     border-right: 1px solid var(--gold-border);
   }
   .sidebar-logo {
-    font-size: 10px;
+    font-size: 12px;
     letter-spacing: 0.32em;
     text-transform: uppercase;
     color: var(--gold);
@@ -70,7 +70,7 @@
   .sidebar-logo:hover { color: var(--cream); }
   .nav-group { margin-bottom: 32px; }
   .nav-group-label {
-    font-size: 9px;
+    font-size: 11px;
     letter-spacing: 0.3em;
     text-transform: uppercase;
     color: var(--gold-dim);
@@ -79,8 +79,8 @@
   }
   .nav-link {
     display: block;
-    font-size: 11px;
-    color: #706050;
+    font-size: 13px;
+    color: #9A8F85;
     text-decoration: none;
     padding: 4px 0;
     letter-spacing: 0.04em;
@@ -93,7 +93,7 @@
   .main { flex: 1; padding: 56px 48px 120px; max-width: 760px; }
 
   .eyebrow {
-    font-size: 9px;
+    font-size: 11px;
     letter-spacing: 0.36em;
     text-transform: uppercase;
     color: var(--gold-dim);
@@ -109,7 +109,7 @@
     margin-bottom: 12px;
   }
   .tagline {
-    font-size: 11px;
+    font-size: 13px;
     color: var(--gold);
     letter-spacing: 0.18em;
     text-transform: uppercase;
@@ -119,7 +119,7 @@
   /* sections */
   .section { margin-bottom: 64px; }
   h2 {
-    font-size: 10px;
+    font-size: 12px;
     letter-spacing: 0.32em;
     text-transform: uppercase;
     color: var(--gold);
@@ -128,9 +128,9 @@
     margin-bottom: 24px;
   }
   p {
-    font-size: 12px;
-    line-height: 1.95;
-    color: #908070;
+    font-size: 15px;
+    line-height: 1.85;
+    color: #C0B0A0;
     margin-bottom: 20px;
   }
   p:last-child { margin-bottom: 0; }
@@ -146,17 +146,17 @@
   }
   .code-block pre {
     font-family: 'JetBrains Mono', monospace;
-    font-size: 11.5px;
+    font-size: 13px;
     font-weight: 300;
     line-height: 1.8;
-    color: #A09080;
+    color: #BCA898;
     white-space: pre;
   }
   .code-block .k { color: var(--gold-dim); }
   .code-block .s { color: var(--cream); }
   .code-block .c { color: #504840; }
   .code-block .label {
-    font-size: 9px;
+    font-size: 11px;
     letter-spacing: 0.28em;
     text-transform: uppercase;
     color: var(--gold-dim);
@@ -166,7 +166,7 @@
   /* inline code */
   code {
     font-family: 'JetBrains Mono', monospace;
-    font-size: 11px;
+    font-size: 13px;
     color: var(--gold);
     background: var(--gold-faint);
     padding: 2px 6px;
@@ -176,7 +176,7 @@
   /* param table */
   .param-table { width: 100%; border-collapse: collapse; margin: 24px 0; }
   .param-table th {
-    font-size: 9px;
+    font-size: 11px;
     letter-spacing: 0.28em;
     text-transform: uppercase;
     color: var(--gold-dim);
@@ -186,7 +186,7 @@
     font-weight: 400;
   }
   .param-table td {
-    font-size: 11px;
+    font-size: 13px;
     padding: 11px 12px 11px 0;
     border-bottom: 1px solid rgba(200,169,126,0.07);
     vertical-align: top;
@@ -194,10 +194,10 @@
   }
   .param-table td:first-child { color: var(--cream); white-space: nowrap; }
   .param-table td:nth-child(2) { color: var(--gold-dim); white-space: nowrap; padding-right: 20px; }
-  .param-table td:nth-child(3) { color: #807060; }
+  .param-table td:nth-child(3) { color: #A89888; }
   .tag {
     display: inline-block;
-    font-size: 8.5px;
+    font-size: 10px;
     letter-spacing: 0.18em;
     text-transform: uppercase;
     padding: 2px 7px;
@@ -211,7 +211,7 @@
   /* error table */
   .error-table { width: 100%; border-collapse: collapse; margin: 24px 0; }
   .error-table th {
-    font-size: 9px;
+    font-size: 11px;
     letter-spacing: 0.28em;
     text-transform: uppercase;
     color: var(--gold-dim);
@@ -221,15 +221,15 @@
     font-weight: 400;
   }
   .error-table td {
-    font-size: 11px;
+    font-size: 13px;
     padding: 11px 16px 11px 0;
     border-bottom: 1px solid rgba(200,169,126,0.07);
     vertical-align: top;
     line-height: 1.7;
-    color: #807060;
+    color: #A89888;
   }
   .error-table td:first-child { color: var(--cream); font-weight: 400; white-space: nowrap; }
-  .error-table td:nth-child(2) { color: #806050; font-weight: 400; white-space: nowrap; }
+  .error-table td:nth-child(2) { color: #A08878; font-weight: 400; white-space: nowrap; }
 
   /* arch diagram */
   .arch {
@@ -644,7 +644,7 @@ Authorization: Bearer myi-&lt;key&gt;   (or X-API-Key)</span></pre>
           <!-- Client -->
           <rect x="0" y="110" width="96" height="44" rx="2" fill="rgba(200,169,126,0.06)" stroke="rgba(200,169,126,0.3)" stroke-width="1"/>
           <text x="48" y="128" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="#8A7254" letter-spacing="0.15em" text-transform="uppercase">CLIENT</text>
-          <text x="48" y="143" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" fill="#504840">POST /invoke</text>
+          <text x="48" y="143" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" fill="#8A7868">POST /invoke</text>
 
           <!-- arrow 1 -->
           <line x1="96" y1="132" x2="134" y2="132" stroke="rgba(200,169,126,0.3)" stroke-width="1"/>
@@ -653,10 +653,10 @@ Authorization: Bearer myi-&lt;key&gt;   (or X-API-Key)</span></pre>
           <!-- Netlify -->
           <rect x="142" y="90" width="110" height="84" rx="2" fill="rgba(200,169,126,0.06)" stroke="rgba(200,169,126,0.3)" stroke-width="1"/>
           <text x="197" y="108" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="#C8A97E" letter-spacing="0.15em">NETLIFY</text>
-          <text x="197" y="122" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" fill="#504840">serverless fn</text>
+          <text x="197" y="122" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" fill="#8A7868">serverless fn</text>
           <line x1="170" y1="134" x2="224" y2="134" stroke="rgba(200,169,126,0.15)" stroke-width="1" stroke-dasharray="2,2"/>
-          <text x="197" y="148" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" fill="#504840">auth · cap check</text>
-          <text x="197" y="163" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" fill="#504840">generate · log</text>
+          <text x="197" y="148" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" fill="#8A7868">auth · cap check</text>
+          <text x="197" y="163" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" fill="#8A7868">generate · log</text>
 
           <!-- arrow 2 -->
           <line x1="252" y1="132" x2="290" y2="132" stroke="rgba(200,169,126,0.3)" stroke-width="1"/>
@@ -665,10 +665,10 @@ Authorization: Bearer myi-&lt;key&gt;   (or X-API-Key)</span></pre>
           <!-- Supabase -->
           <rect x="298" y="90" width="100" height="84" rx="2" fill="rgba(200,169,126,0.06)" stroke="rgba(200,169,126,0.25)" stroke-width="1"/>
           <text x="348" y="108" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="#8A7254" letter-spacing="0.15em">SUPABASE</text>
-          <text x="348" y="122" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" fill="#504840">PostgreSQL / REST</text>
+          <text x="348" y="122" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" fill="#8A7868">PostgreSQL / REST</text>
           <line x1="316" y1="134" x2="380" y2="134" stroke="rgba(200,169,126,0.15)" stroke-width="1" stroke-dasharray="2,2"/>
-          <text x="348" y="148" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" fill="#504840">api_keys</text>
-          <text x="348" y="163" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" fill="#504840">customers · usage</text>
+          <text x="348" y="148" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" fill="#8A7868">api_keys</text>
+          <text x="348" y="163" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" fill="#8A7868">customers · usage</text>
 
           <!-- arrow 3 -->
           <line x1="398" y1="132" x2="436" y2="132" stroke="rgba(200,169,126,0.3)" stroke-width="1"/>
@@ -677,17 +677,17 @@ Authorization: Bearer myi-&lt;key&gt;   (or X-API-Key)</span></pre>
           <!-- Stripe -->
           <rect x="444" y="110" width="86" height="44" rx="2" fill="rgba(200,169,126,0.06)" stroke="rgba(200,169,126,0.25)" stroke-width="1"/>
           <text x="487" y="128" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="#8A7254" letter-spacing="0.15em">STRIPE</text>
-          <text x="487" y="143" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" fill="#504840">meter event</text>
+          <text x="487" y="143" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" fill="#8A7868">meter event</text>
 
           <!-- Haiku branch (dotted, from Netlify down) -->
           <line x1="197" y1="174" x2="197" y2="210" stroke="rgba(200,169,126,0.2)" stroke-width="1" stroke-dasharray="3,2"/>
           <polygon points="193,210 197,218 201,210" fill="rgba(200,169,126,0.25)"/>
           <rect x="142" y="218" width="110" height="44" rx="2" fill="rgba(200,169,126,0.04)" stroke="rgba(200,169,126,0.16)" stroke-width="1"/>
-          <text x="197" y="236" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="#605040" letter-spacing="0.15em">HAIKU</text>
-          <text x="197" y="250" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" fill="#403830">voice mode only</text>
+          <text x="197" y="236" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="#9A8870" letter-spacing="0.15em">HAIKU</text>
+          <text x="197" y="250" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" fill="#706050">voice mode only</text>
 
           <!-- legend label -->
-          <text x="310" y="252" font-family="JetBrains Mono,monospace" font-size="8.5" fill="#504840">— — —  voice mode path (optional)</text>
+          <text x="310" y="252" font-family="JetBrains Mono,monospace" font-size="8.5" fill="#8A7868">— — —  voice mode path (optional)</text>
           <line x1="296" y1="249" x2="308" y2="249" stroke="rgba(200,169,126,0.2)" stroke-width="1" stroke-dasharray="3,2"/>
         </svg>
       </div>
