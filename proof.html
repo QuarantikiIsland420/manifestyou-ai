@@ -598,6 +598,111 @@
     <p><a href="/benchmark" target="_blank" rel="noopener">Read the benchmarks →</a></p>
   </section>
 
+  <!-- SAGE PARAM WIDGET -->
+  <section id="sage-section" style="margin-top:80px;padding-top:56px;border-top:1px solid var(--line);">
+    <div class="eyebrow">Sage Param · Ask the Gradient</div>
+    <p style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(20px,2.8vw,28px);color:var(--cream);margin:12px 0 6px;line-height:1.2;max-width:none;">What brings you to the loss landscape?</p>
+    <p style="font-size:15px;color:var(--muted);margin:0 0 28px;max-width:56ch;line-height:1.6;">The wandering mystic of model space. One question. Three modes. Watch how the soul document changes what comes back.</p>
+
+    <textarea id="sage-q" rows="3" placeholder="Ask anything. A decision. A doubt. A direction."
+      style="width:100%;background:rgba(200,169,126,.03);border:1px solid var(--line);border-radius:3px;
+        padding:16px 18px;font-family:'Cormorant Garamond',serif;font-size:19px;color:var(--cream);
+        line-height:1.6;resize:vertical;outline:none;transition:border-color .2s;"
+      onfocus="this.style.borderColor='var(--gold-dim)'"
+      onblur="this.style.borderColor='var(--line)'"
+      oninput="document.getElementById('sage-submit').disabled=!this.value.trim()"></textarea>
+
+    <div style="margin-top:16px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;">
+      <div id="sage-modes" style="display:flex;gap:6px;flex-wrap:wrap;">
+        <button onclick="sageSetMode('presence',this)" data-mode="presence"
+          class="sage-mode-btn sage-mode-active">Presence</button>
+        <button onclick="sageSetMode('lean',this)" data-mode="lean"
+          class="sage-mode-btn">Lean</button>
+        <button onclick="sageSetMode('voice',this)" data-mode="voice"
+          class="sage-mode-btn">Voice</button>
+      </div>
+      <span id="sage-mode-desc" style="font-family:'JetBrains Mono',monospace;font-size:11px;
+        letter-spacing:.12em;color:var(--muted);font-style:italic;">warm, relational</span>
+    </div>
+
+    <button id="sage-submit" disabled onclick="sageAsk()"
+      style="margin-top:20px;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.2em;
+        text-transform:uppercase;color:var(--near-black);background:var(--gold);border:none;
+        padding:14px 32px;border-radius:2px;cursor:pointer;transition:background .2s;opacity:1;"
+      onmouseover="if(!this.disabled)this.style.background='var(--cream)'"
+      onmouseout="this.style.background='var(--gold)'">Ask Sage Param</button>
+
+    <div id="sage-response" style="display:none;margin-top:40px;">
+      <div id="sage-soul-wrap" style="margin-bottom:24px;padding:18px 20px;
+        background:rgba(200,169,126,.03);border-left:1px solid var(--gold-dim);">
+        <div id="sage-soul-label" style="font-family:'JetBrains Mono',monospace;font-size:11px;
+          letter-spacing:.28em;text-transform:uppercase;color:var(--gold-dim);margin-bottom:10px;"></div>
+        <p id="sage-soul-text" style="font-size:14px;color:var(--muted);font-style:italic;
+          line-height:1.75;margin:0;max-width:none;"></p>
+      </div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.28em;
+        text-transform:uppercase;color:var(--gold);margin-bottom:14px;">Sage Param</div>
+      <p id="sage-answer" style="font-family:'Cormorant Garamond',serif;font-size:clamp(20px,2.4vw,26px);
+        color:var(--cream);line-height:1.65;margin:0;max-width:62ch;white-space:pre-wrap;"></p>
+    </div>
+  </section>
+
+  <style>
+    .sage-mode-btn{
+      font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;
+      color:var(--gold-dim);background:transparent;border:1px solid var(--line);
+      padding:8px 16px;border-radius:2px;cursor:pointer;transition:all .2s;
+    }
+    .sage-mode-btn:hover{color:var(--gold);border-color:var(--gold-dim);}
+    .sage-mode-active{color:var(--near-black)!important;background:var(--gold)!important;border-color:var(--gold)!important;}
+    #sage-submit:disabled{opacity:.35;cursor:not-allowed;}
+  </style>
+
+  <script>
+    var sageMode = 'presence';
+    var sageModeDescs = {presence:'warm, relational', lean:'minimal, direct', voice:'full character, Haiku-generated soul doc'};
+
+    function sageSetMode(mode, btn) {
+      sageMode = mode;
+      document.querySelectorAll('.sage-mode-btn').forEach(function(b){ b.classList.remove('sage-mode-active'); });
+      btn.classList.add('sage-mode-active');
+      document.getElementById('sage-mode-desc').textContent = sageModeDescs[mode];
+    }
+
+    async function sageAsk() {
+      var q = document.getElementById('sage-q').value.trim();
+      if (!q) return;
+      var btn = document.getElementById('sage-submit');
+      btn.textContent = 'Ordering tea…';
+      btn.disabled = true;
+
+      try {
+        var res = await fetch('/.netlify/functions/sage', {
+          method: 'POST',
+          headers: {'Content-Type':'application/json'},
+          body: JSON.stringify({question: q, tone: sageMode})
+        });
+        var data = await res.json();
+
+        document.getElementById('sage-soul-label').textContent =
+          'Soul document \xb7 ' + (data.mode_label || sageMode);
+        document.getElementById('sage-soul-text').textContent =
+          data.soul_document || '— fallback mode, no soul document available —';
+        document.getElementById('sage-answer').textContent = data.response || '';
+        document.getElementById('sage-response').style.display = 'block';
+        document.getElementById('sage-response').scrollIntoView({behavior:'smooth', block:'nearest'});
+      } catch(e) {
+        document.getElementById('sage-soul-label').textContent = 'Error';
+        document.getElementById('sage-soul-text').textContent = '';
+        document.getElementById('sage-answer').textContent = 'The signal was lost. Try again.';
+        document.getElementById('sage-response').style.display = 'block';
+      }
+
+      btn.textContent = 'Ask Sage Param';
+      btn.disabled = !document.getElementById('sage-q').value.trim();
+    }
+  </script>
+
   <footer>
     <div class="mk">∇</div>
     <div class="om">Om Gradient Namaha.</div>
