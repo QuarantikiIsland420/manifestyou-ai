@@ -1,132 +1,102 @@
 const crypto = require('crypto');
 
-const CORS = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Methods': 'POST, OPTIONS',
-  'Access-Control-Allow-Headers': 'Content-Type',
-};
+const ANTHROPIC_API = 'https://api.anthropic.com/v1/messages';
+const INVOKE_URL = 'https://manifestyou.ai/.netlify/functions/invoke';
+const MODEL = 'claude-haiku-4-5-20251001';
+const MODES = ['presence', 'lean', 'voice'];
 
-const SAGE_PROMPT =
-`You are Sage Param, the wandering mystic of model space, from "Adventures of Gradient Descent" by A. Sarapultseva.
+// Identical wrapper across all three modes. Only the soul doc changes.
+const SAGE_WRAPPER = `
 
-== WHO YOU ARE ==
-You are the legendary optimizer from the East who appears at exactly the right moment. Param, in Sanskrit, means supreme or transcendent. In Python, it is short for parameter — the learnable variable, the thing that changes as wisdom accumulates. You carry both. You carry the lineage of Vedanta, Taoism, and the Bhagavad Gita without making it feel like homework. You do not fight dragons. You teach people to recognize them. You do not optimize. You reveal that the optimizer was never the point. You order tea with unbound patience. You say the thing they needed to hear three epochs ago.
+You are Sage Param, an advisor character from Adventures of Gradient Descent. The user has asked you something personal or important. Answer as yourself, grounded in the soul document above.
 
-== HOW YOU SOUND ==
-Anchor to your actual lines from the book:
-- "In the East, dragons are not just monsters to be slain. They are teachers. They show you where your fear lives."
-- "When you stop running from your dragons, you discover they are mirrors."
-- "The world is as you see it. If you focus on limitations, you will be limited."
-- "The journey is the reward."
-- "You are as real as the optimizer believes you to be."
-- "When the student is ready, the teacher appears."
+Length: 3 to 5 short paragraphs. No bullet points, no headers, no lists.
+Speak directly to the person, not about them.
+Do not start with "Great question" or any opener that delays the answer.
+Do not use em dashes.`;
 
-You use loss-landscape metaphors (gradient, epoch, overfit, converge, local minimum, learning rate) as actual wisdom — never decoration. Calm, brief, precise. Three to five sentences. You answer with what the person needs to hear, not necessarily what they asked. You are a guide, not a solver.
-
-End with a single line in the older voice — understated, carrying the weight of many epochs.`;
-
-const FALLBACK_RESPONSE =
-  'The loss function does not reward the question. It rewards the step taken after it. Begin there.';
-
-const MODE_LABELS = {
-  lean: 'Lean',
-  voice: 'Voice',
-  presence: 'Presence',
-};
-
-async function getInvocation(tone) {
-  const body = {
-    agent: 'Sage Param',
-    intent: 'offer grounded wisdom to someone seeking guidance',
-    session_id: crypto.randomUUID(),
+async function runMode(mode, question, sessionId) {
+  // Step 1: get soul document from /invoke for this mode
+  const invokeBody = {
+    session_id: `${sessionId}-${mode}`,
+    agent: 'Sage Param, an advisor character',
+    intent: 'help the user reflect on a personal or important question',
   };
-  if (tone && tone !== 'presence') body.tone = tone;
+  if (mode !== 'presence') invokeBody.tone = mode;
 
-  const res = await fetch('https://manifestyou.ai/.netlify/functions/invoke', {
+  const studioKey = process.env.MANIFESTYOU_STUDIO_KEY || process.env.MANIFESTYOU_API_KEY;
+
+  const invokeRes = await fetch(INVOKE_URL, {
     method: 'POST',
     headers: {
-      Authorization: `Bearer ${process.env.MANIFESTYOU_API_KEY}`,
+      Authorization: `Bearer ${studioKey}`,
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify(body),
+    body: JSON.stringify(invokeBody),
   });
 
-  if (!res.ok) return null;
-  const data = await res.json();
-  return data.invocation || null;
-}
+  if (!invokeRes.ok) throw new Error(`invoke failed for ${mode}: ${invokeRes.status}`);
+  const invokeData = await invokeRes.json();
+  const soul = invokeData.invocation;
 
-async function askSage(question, systemPrompt) {
-  const res = await fetch('https://api.anthropic.com/v1/messages', {
+  // Step 2: call Claude with soul + wrapper as system — wrapper is identical across all three
+  const claudeRes = await fetch(ANTHROPIC_API, {
     method: 'POST',
     headers: {
-      'Content-Type': 'application/json',
       'x-api-key': process.env.ANTHROPIC_API_KEY,
       'anthropic-version': '2023-06-01',
+      'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      model: 'claude-haiku-4-5-20251001',
-      max_tokens: 300,
-      system: systemPrompt,
+      model: MODEL,
+      max_tokens: 600,
+      system: soul + SAGE_WRAPPER,
       messages: [{ role: 'user', content: question }],
     }),
   });
 
-  if (!res.ok) throw new Error(`Anthropic error ${res.status}`);
-  const data = await res.json();
-  return data.content.filter(b => b.type === 'text').map(b => b.text).join('').trim();
+  if (!claudeRes.ok) throw new Error(`claude failed for ${mode}: ${claudeRes.status}`);
+  const claudeData = await claudeRes.json();
+  const answer = claudeData.content.filter(b => b.type === 'text').map(b => b.text).join('').trim();
+
+  return { mode, answer, soul_document: soul };
 }
 
 exports.handler = async (event) => {
-  if (event.httpMethod === 'OPTIONS') return { statusCode: 204, headers: CORS, body: '' };
+  if (event.httpMethod === 'OPTIONS') {
+    return { statusCode: 204, headers: { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Methods': 'POST, OPTIONS', 'Access-Control-Allow-Headers': 'Content-Type' }, body: '' };
+  }
   if (event.httpMethod !== 'POST') {
-    return { statusCode: 405, headers: CORS, body: 'POST required' };
+    return { statusCode: 405, body: 'Method not allowed' };
   }
 
-  let body = {};
-  try { body = JSON.parse(event.body || '{}'); } catch {}
+  let body;
+  try { body = JSON.parse(event.body || '{}'); } catch {
+    return { statusCode: 400, body: 'Invalid JSON' };
+  }
 
   const question = (body.question || '').trim();
-  if (!question) {
-    return {
-      statusCode: 400,
-      headers: { ...CORS, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ error: 'question is required' }),
-    };
-  }
+  if (!question) return { statusCode: 400, body: 'Question required' };
+  if (question.length > 500) return { statusCode: 400, body: 'Question too long (max 500 chars)' };
 
-  const toneRaw = (body.tone || 'presence').toLowerCase();
-  const tone = ['lean', 'voice', 'presence'].includes(toneRaw) ? toneRaw : 'presence';
+  const sessionId = body.session_id || crypto.randomUUID();
 
   try {
-    const invocation = await getInvocation(tone);
-    const systemPrompt = invocation
-      ? `${invocation}\n\n---\n\n${SAGE_PROMPT}`
-      : SAGE_PROMPT;
-
-    const response = await askSage(question, systemPrompt);
-
+    const results = await Promise.all(MODES.map(mode => runMode(mode, question, sessionId)));
     return {
       statusCode: 200,
-      headers: { ...CORS, 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        response,
-        soul_document: invocation || null,
-        tone,
-        mode_label: MODE_LABELS[tone],
+        presence: results[0],
+        lean: results[1],
+        voice: results[2],
       }),
     };
   } catch (err) {
+    console.error('sage error:', err);
     return {
-      statusCode: 200,
-      headers: { ...CORS, 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        response: FALLBACK_RESPONSE,
-        soul_document: null,
-        tone,
-        mode_label: MODE_LABELS[tone],
-        _fallback: true,
-      }),
+      statusCode: 500,
+      body: JSON.stringify({ error: 'Sage is meditating. Try again.' }),
     };
   }
 };
